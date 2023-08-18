@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Todo\Task;
 
 class User extends Authenticatable
 {
@@ -42,4 +43,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    //связь таблицы one to many с таб 'tasks'
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+    /**
+     * The prooblems that belong to the
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function problems()
+    {
+        return $this->belongsToMany(Task::class);
+    }
 }
