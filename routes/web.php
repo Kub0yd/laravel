@@ -19,3 +19,5 @@ Route::get('/', function () {
 // Route::get('/tasks', [TaskController::class, 'index']);
 Route::resource('/tasks', TaskController::class);
 
+Route::get('/test', App\Http\Controllers\TestController::class);
+
