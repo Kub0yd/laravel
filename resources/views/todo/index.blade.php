@@ -60,7 +60,7 @@
                             <form method="POST" action ="{{route('tasks.destroy', ['task' => $task->id])}}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="mt-2 btn btn-primary">Удалить</button>
+                                <button type="submit" class="bg-cyan-500 hover:bg-cyan-600 mt-2 btn btn-primary">Удалить</button>
                             </form>
 
                         </div>
