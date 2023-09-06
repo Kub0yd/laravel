@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/', function () {
             return view('welcome');
         });
+    Route::resource('/main', App\Http\Controllers\AdTech\OfferController::class);
 });
 Route::get('/playground', function () {
     event(new \App\Events\PlaygroundEvent());

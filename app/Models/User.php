@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Todo\Task;
+use App\Models\AdTech\Offer;
 
 class User extends Authenticatable
 {
@@ -56,5 +57,9 @@ class User extends Authenticatable
     public function problems()
     {
         return $this->belongsToMany(Task::class);
+    }
+    public function offers()
+    {
+        return $this->hasMany(Offer::class);
     }
 }
