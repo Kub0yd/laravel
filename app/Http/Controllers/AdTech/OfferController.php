@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\AdTech;
 
 use App\Http\Controllers\Controller;
-use App\Models\AdTech\offer;
+use App\Models\AdTech\Offer;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\AdTech\Offer;
 use Illuminate\Support\Facades\Auth;
 
 class OfferController extends Controller
@@ -18,9 +17,12 @@ class OfferController extends Controller
     {
         //
         if(Auth::check()){
+
             $user = Auth::user();
+            $offers = Offer::where('creator_id', $user->id)->get();
+            $all_offers = Offer::whereNotIn('creator_id', [$user->id])->where('is_active', [true])->get();
         }
-        return view('adTech.main');
+        return view('adTech.main',  compact('offers', 'all_offers'));
     }
 
     /**
@@ -37,6 +39,23 @@ class OfferController extends Controller
     public function store(Request $request)
     {
         //
+        $validated = $request->validate([
+            'title' => 'required',
+        ]);
+        try {
+            // dd($request->all());
+            $offer = new Offer();
+            $offer->title = $request->title;
+            $offer->URL = $request->URL;
+            $offer->price = $request->price;
+            $offer->creator_id = Auth::id();
+            $offer->save();
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+
+        return back();
     }
 
     /**

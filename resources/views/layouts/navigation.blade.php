@@ -32,6 +32,7 @@
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form> --}}
       <!-- Responsive Navigation Menu -->
+      <form class="d-flex">
       <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ Auth::user()->name }}
@@ -55,6 +56,7 @@
           </a>
         </div>
       </div>
+      </form>
     </div>
   </nav>
 

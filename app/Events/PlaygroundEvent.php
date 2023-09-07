@@ -9,17 +9,21 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use App\Models\User;
 
 class PlaygroundEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+    private string $message;
+    private User $user;
 
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct( $user)
     {
         //
+        $this->user = $user;
     }
 
     /**
@@ -33,7 +37,7 @@ class PlaygroundEvent implements ShouldBroadcast
         //     new PrivateChannel('channel-name'),
         // ];
         return [
-            new Channel('public.playground.1'),
+            new PrivateChannel('public.chat.1'),
         ];
     }
     public function broadcastAs()
@@ -43,7 +47,7 @@ class PlaygroundEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'test' => '123'
+            'user' => $this->user->only(['name', 'email'])
         ];
     }
 }
