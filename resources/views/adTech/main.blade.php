@@ -63,7 +63,12 @@
             <div class="col-sm">
                 <fieldset>
                 <div class="card border-dark mb-3">
-                    <div class="card-header">{{$offer->title}}</div>
+                    <div class="card-header">
+                        <div class="row">
+                            <p class="text col" >{{$offer->title}}</p>
+                            <p class="text-end col my-offer" id="offer-id-{{$offer->id}}">#{{$offer->id}}</p>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <a href="{{$offer->URL}}" class="card-subtitle mb-2 text-muted">{{$offer->URL}}</a>
                         <div class="row">
@@ -89,12 +94,18 @@
         <div class="row">
             @foreach ($all_offers as $offer)
             <div class="col-sm">
-                <div class="card border-dark mb-3">
+                <div class="card border-dark mb-3 " >
+                    <div class="card-header">
+                        <div class="row">
+                            <p class="text col" >{{$offer->title}}</p>
+                            <p class="text-end col" id="offer-id-{{$offer->id}}">#{{$offer->id}}</p>
+                        </div>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{$offer->title}}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{$offer->URL}}</h6>
                         <p class="cart-text" >By: {{$offer->user->name}}</p>
                         <div class="row">
+                            <button class="btn btn-primary col" id="offer-id-{{$offer->id}}-button" type="submit">Sub</button>
                             <p class="text-end col" >{{$offer->price}} &#8381</p>
                         </div>
                     </div>

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Events\OfferStatus;
+use App\Services\OfferService;
 
 class OfferController extends Controller
 {
@@ -81,15 +82,16 @@ class OfferController extends Controller
     public function update(Request $request, offer $offer)
     {
         //
+        switch ($request->type) {
+            case 'offerStatus':
+                (new OfferService())->updateOfferStatus($request);
+                break;
 
-        $data = $request->toArray();
-        $id = $request->offer_id;
-        $offerData = Offer::find($id);
-        $offerData->is_active = $data->is_active;
-        // $offerData->save();
+            default:
+                # code...
+                break;
+        }
 
-        // OfferStatus::dispatch(json_encode(array('offer_id' => $offerData->id, 'is_active' => $offerData->isActive)));
-        // return response()->json(['success' => true]);
     }
 
     /**

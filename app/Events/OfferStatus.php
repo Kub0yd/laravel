@@ -14,7 +14,7 @@ class OfferStatus implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $testMess;
+    public $response;
 
     /**
      * Create a new event instance.
@@ -22,7 +22,7 @@ class OfferStatus implements ShouldBroadcast
     public function __construct($message)
     {
         //
-        $this->testMess = $message;
+        $this->response = $message;
     }
 
     /**

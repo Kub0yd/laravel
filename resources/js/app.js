@@ -10,7 +10,19 @@ const channel = Echo.channel('public.status');
 channel.subscribed( () => {
     console.log('subscribed!')
 }).listen('.offer.status', (event) => {
-    console.log(event);
+
+
+    let response = event.response;
+    switch (response.type) {
+        case 'offerStatus':
+            offerStatusEvent(response);
+            break;
+
+        case 'error':
+            console.log(response);
+            break;
+    }
+
 });
 // const channel = Echo.channel('private.playground.1');
 
