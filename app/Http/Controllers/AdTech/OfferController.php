@@ -7,6 +7,7 @@ use App\Models\AdTech\Offer;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Events\OfferStatus;
 
 class OfferController extends Controller
 {
@@ -20,7 +21,7 @@ class OfferController extends Controller
 
             $user = Auth::user();
             $offers = Offer::where('creator_id', $user->id)->get();
-            $all_offers = Offer::whereNotIn('creator_id', [$user->id])->where('is_active', [true])->get();
+            $all_offers = Offer::with(['user'])->whereNotIn('creator_id', [$user->id])->where('is_active', [true])->get();
         }
         return view('adTech.main',  compact('offers', 'all_offers'));
     }
@@ -80,6 +81,15 @@ class OfferController extends Controller
     public function update(Request $request, offer $offer)
     {
         //
+
+        $data = $request->toArray();
+        $id = $request->offer_id;
+        $offerData = Offer::find($id);
+        $offerData->is_active = $data->is_active;
+        // $offerData->save();
+
+        // OfferStatus::dispatch(json_encode(array('offer_id' => $offerData->id, 'is_active' => $offerData->isActive)));
+        // return response()->json(['success' => true]);
     }
 
     /**

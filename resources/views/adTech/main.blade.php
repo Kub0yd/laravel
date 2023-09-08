@@ -61,13 +61,25 @@
         <div class="row">
             @foreach ($offers as $offer)
             <div class="col-sm">
+                <fieldset>
                 <div class="card border-dark mb-3">
                     <div class="card-header">{{$offer->title}}</div>
                     <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">{{$offer->URL}}</h6>
-                        <p class="card-text">{{$offer->price}}</p>
+                        <a href="{{$offer->URL}}" class="card-subtitle mb-2 text-muted">{{$offer->URL}}</a>
+                        <div class="row">
+                            <p class="text-end col" >{{$offer->price}} &#8381</p>
+                            <div class="form-check form-switch col">
+                                @if ($offer->is_active)
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked>
+                                @else
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                                @endif
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Активность</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                </fieldset>
             </div>
             @endforeach
         </div>
@@ -81,12 +93,9 @@
                     <div class="card-body">
                         <h5 class="card-title">{{$offer->title}}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{$offer->URL}}</h6>
+                        <p class="cart-text" >By: {{$offer->user->name}}</p>
                         <div class="row">
-                            <p class="text-end col" >{{$offer->price}}</p>
-                            <div class="form-check form-switch col">
-                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Отключить</label>
-                            </div>
+                            <p class="text-end col" >{{$offer->price}} &#8381</p>
                         </div>
                     </div>
                 </div>
@@ -95,5 +104,8 @@
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+    <script src="/js/main.js"></script>
 @endsection
 
