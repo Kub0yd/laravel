@@ -53,6 +53,8 @@ class OfferController extends Controller
             $offer->creator_id = Auth::id();
             $offer->save();
 
+            // OfferStatus::dispatch(array('type' => 'createOffer', 'title' => $request->title, 'URL' => $request->URL, 'price' => $request->price, 'creator' => Auth::user()->name));
+
         } catch (\Exception $e) {
             dd($e->getMessage());
         }

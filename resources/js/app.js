@@ -21,6 +21,10 @@ channel.subscribed( () => {
         case 'error':
             console.log(response);
             break;
+
+        case 'createOffer':
+            createCard(response);
+            break;
     }
 
 });

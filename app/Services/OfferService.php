@@ -17,12 +17,19 @@ class OfferService
 
         $offerId = $requestData->offer_id;
         $offer = Offer::find($offerId);
+
         if (Auth::user()->id == $offer->creator_id){
             $offer->is_active = $requestData->is_active;
             $offer->save();
-
             // OfferStatus::dispatch(json_encode(array('type' => 'offerStatus', 'offer_id' => $offer->id, 'is_active' => $offer->is_active)));
-            OfferStatus::dispatch(array('type' => 'offerStatus', 'offer_id' => $offer->id, 'is_active' => $offer->is_active));
+            OfferStatus::dispatch([
+                'type' => 'offerStatus',
+                'offer_id' => $offerId,
+                'is_active' => $offer->is_active,
+                'price' => $offer->price,
+                'creator' => Auth::user()->name,
+                'title' => $offer->title,
+                'URL' => $offer->URL]);
         }
         else {
             OfferStatus::dispatch(array('type' => 'error', 'user' => Auth::user()->name, 'offer' => $offer->title ));
