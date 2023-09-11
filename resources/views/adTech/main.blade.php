@@ -83,6 +83,9 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card-footer text-muted offer-{{$offer->id}}-subs">
+                        Подписок: {{$offer->subs->where('is_active', true)->count()}}
+                    </div>
                 </div>
                 </fieldset>
             </div>

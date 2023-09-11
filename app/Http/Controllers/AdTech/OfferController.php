@@ -5,10 +5,13 @@ namespace App\Http\Controllers\AdTech;
 use App\Http\Controllers\Controller;
 use App\Models\AdTech\Offer;
 use Illuminate\Http\Request;
+use App\Models\AdTech\Sub;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Events\OfferStatus;
 use App\Services\OfferService;
+use App\Services\SubService;
+use App\Http\Controllers\AdTech\SubController;
 
 class OfferController extends Controller
 {
@@ -21,8 +24,12 @@ class OfferController extends Controller
         if(Auth::check()){
 
             $user = Auth::user();
+            $subs =
             $offers = Offer::where('creator_id', $user->id)->get();
             $all_offers = Offer::with(['user'])->whereNotIn('creator_id', [$user->id])->where('is_active', [true])->get();
+
+            // $subs = Sub::where('offer_id', Offer::where('id', 1)->get())->get();
+            // dd(Auth::user()->subs()->where('offer_id', 1)->where('is_active', true)->get());
         }
         return view('adTech.main',  compact('offers', 'all_offers'));
     }
@@ -41,25 +48,68 @@ class OfferController extends Controller
     public function store(Request $request)
     {
         //
-        $validated = $request->validate([
-            'title' => 'required',
-        ]);
-        try {
-            // dd($request->all());
-            $offer = new Offer();
-            $offer->title = $request->title;
-            $offer->URL = $request->URL;
-            $offer->price = $request->price;
-            $offer->creator_id = Auth::id();
-            $offer->save();
+        // switch ($request->subscription) {
+        //     case 'subscribe':
+        //         (new SubService())->subscribe($request);
+        //         break;
 
-            // OfferStatus::dispatch(array('type' => 'createOffer', 'title' => $request->title, 'URL' => $request->URL, 'price' => $request->price, 'creator' => Auth::user()->name));
+        //     case 'unsubscribe':
+        //         (new SubService())->unsubscribe($request);
+        //         break;
 
-        } catch (\Exception $e) {
-            dd($e->getMessage());
+        //     default:
+        //         $validated = $request->validate([
+        //             'title' => 'required',
+        //         ]);
+        //         try {
+        //             // dd($request->all());
+        //             $offer = new Offer();
+        //             $offer->title = $request->title;
+        //             $offer->URL = $request->URL;
+        //             $offer->price = $request->price;
+        //             $offer->creator_id = Auth::id();
+        //             $offer->save();
+
+        //             // OfferStatus::dispatch(array('type' => 'createOffer', 'title' => $request->title, 'URL' => $request->URL, 'price' => $request->price, 'creator' => Auth::user()->name));
+
+        //         } catch (\Exception $e) {
+        //             dd($e->getMessage());
+        //         }
+
+        //         return back();
+        //             break;
+        // }
+
+        if ($request->subscription == 'subscribe'){
+
+            (new SubService())->subscribe($request);
+            return back();
+        }else if($request->subscription == 'unsubscribe'){
+            (new SubService())->unsubscribe($request);
+            return back();
+            // dd($request->subscription);
+        }else{
+            var_dump($request->subscribtion);
+            $validated = $request->validate([
+                'title' => 'required',
+            ]);
+            try {
+                // dd($request->all());
+                $offer = new Offer();
+                $offer->title = $request->title;
+                $offer->URL = $request->URL;
+                $offer->price = $request->price;
+                $offer->creator_id = Auth::id();
+                $offer->save();
+
+                // OfferStatus::dispatch(array('type' => 'createOffer', 'title' => $request->title, 'URL' => $request->URL, 'price' => $request->price, 'creator' => Auth::user()->name));
+
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+
+            return back();
         }
-
-        return back();
     }
 
     /**
@@ -103,4 +153,5 @@ class OfferController extends Controller
     {
         //
     }
+
 }

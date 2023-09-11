@@ -42,6 +42,17 @@ function offerStatusEvent(event){
     }
 }
 
+function updateSubs(response){
+
+    let offerSubsCount = document.querySelector('.offer-' + response.offer_id + '-subs');
+
+    if (offerSubsCount){
+        console.log(response);
+        offerSubsCount.textContent = "Подписок: " + response.offer_subs;
+    }
+}
+
+
 function createCard (response){
     const colSmDiv = document.createElement("div");
     colSmDiv.classList.add("col-sm");

@@ -5,6 +5,7 @@ namespace App\Models\AdTech;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\AdTech\Sub;
 
 class Offer extends Model
 {
@@ -18,6 +19,10 @@ class Offer extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'creator_id', 'id');
+    }
+    public function subs()
+    {
+        return $this->hasMany(Sub::class);
     }
 
 }

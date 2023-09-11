@@ -31,6 +31,8 @@ Route::middleware('auth')->group(function () {
             return view('welcome');
         });
     Route::resource('/main', App\Http\Controllers\AdTech\OfferController::class);
+    Route::resource('/subs', App\Http\Controllers\AdTech\SubController::class);
+
     // Route::post('/main/update', [App\Http\Controllers\AdTech\OfferController::class, 'update']);
 });
 Route::get('/playground', function () {

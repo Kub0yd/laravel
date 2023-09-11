@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Todo\Task;
 use App\Models\AdTech\Offer;
+use App\Models\AdTech\Sub;
 
 class User extends Authenticatable
 {
@@ -61,5 +62,9 @@ class User extends Authenticatable
     public function offers()
     {
         return $this->hasMany(Offer::class);
+    }
+    public function subs()
+    {
+        return $this->hasMany(Sub::class);
     }
 }

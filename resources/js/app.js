@@ -25,6 +25,10 @@ channel.subscribed( () => {
         case 'createOffer':
             createCard(response);
             break;
+
+        case 'subStatus':
+            updateSubs(response);
+            break;
     }
 
 });
