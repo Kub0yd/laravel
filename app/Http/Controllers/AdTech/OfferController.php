@@ -24,7 +24,6 @@ class OfferController extends Controller
         if(Auth::check()){
 
             $user = Auth::user();
-            $subs =
             $offers = Offer::where('creator_id', $user->id)->get();
             $all_offers = Offer::with(['user'])->whereNotIn('creator_id', [$user->id])->where('is_active', [true])->get();
 

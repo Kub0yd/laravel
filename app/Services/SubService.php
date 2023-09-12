@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Events\OfferStatus;
+use Illuminate\Support\Str;
 
 class SubService
 {
@@ -28,7 +29,7 @@ class SubService
                 $sub = new Sub();
                 $sub->offer_id = $request->offer_id;
                 $sub->user_id = Auth::id();
-                $sub->link = "http://localhost/main/123131";
+                $sub->link = url("/redirect/".Str::random($length = 16));
                 $sub->is_active = true;
                 $sub->save();
             }

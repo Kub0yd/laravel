@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/main', App\Http\Controllers\AdTech\OfferController::class);
     Route::resource('/subs', App\Http\Controllers\AdTech\SubController::class);
 
+
     // Route::post('/main/update', [App\Http\Controllers\AdTech\OfferController::class, 'update']);
 });
 Route::get('/playground', function () {
@@ -40,5 +41,5 @@ Route::get('/playground', function () {
 
     return null;
 });
-
+Route::get('/redirect/{id}', [App\Http\Controllers\AdTech\RedirectController::class, 'redirect']);
 require __DIR__.'/auth.php';

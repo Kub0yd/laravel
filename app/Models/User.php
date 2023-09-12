@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\Todo\Task;
 use App\Models\AdTech\Offer;
 use App\Models\AdTech\Sub;
+use App\Models\AdTech\Transaction;
 
 class User extends Authenticatable
 {
@@ -66,5 +67,9 @@ class User extends Authenticatable
     public function subs()
     {
         return $this->hasMany(Sub::class);
+    }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\AdTech\Sub;
+use App\Models\AdTech\Transaction;
 
 class Offer extends Model
 {
@@ -23,6 +24,10 @@ class Offer extends Model
     public function subs()
     {
         return $this->hasMany(Sub::class);
+    }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 
 }
