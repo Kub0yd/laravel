@@ -100,6 +100,9 @@
 </div>
 @endsection
 @section('scripts')
+    <script>
+        var userId  = {{ Js::from(Auth::id())}};
+    </script>
     <script src="/js/main.js"></script>
 @endsection
 

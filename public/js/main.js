@@ -1,6 +1,12 @@
 let offerStatusCheckBox = document.querySelectorAll('#flexSwitchCheckDefault');
 let offerCardsPanel = document.querySelector('.offer-cards-panel');
 
+// var app = {{ Illuminate\Support\Js::from($array) }};
+// const userChannel = Echo.private('user.'.userId);
+
+// userChannel.listen('OrderShipmentStatusUpdated', (e) => {
+//     console.log(e);
+// });
 
 
 offerStatusCheckBox.forEach(item => {

@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('/subs', App\Http\Controllers\AdTech\SubController::class);
 
 
+
+
     // Route::post('/main/update', [App\Http\Controllers\AdTech\OfferController::class, 'update']);
 });
 Route::get('/playground', function () {
@@ -43,3 +45,7 @@ Route::get('/playground', function () {
 });
 Route::get('/redirect/{id}', [App\Http\Controllers\AdTech\RedirectController::class, 'redirect']);
 require __DIR__.'/auth.php';
+
+Route::post('/broadcasting/auth', function () {
+    return Auth::user();
+ });

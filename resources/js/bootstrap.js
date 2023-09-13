@@ -19,6 +19,7 @@ import Echo from 'laravel-echo';
 
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
+let token = document.querySelector('meta[name="csrf-token"]');
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
@@ -30,4 +31,9 @@ window.Echo = new Echo({
     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
     encrypted: false,
     enabledTransports: ['ws', 'wss'],
+    // auth: {
+    //     headers: {
+    //         Authorization: 'Bearer ' + token.content
+    //     },
+    // },
 });

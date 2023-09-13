@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 /*
 |--------------------------------------------------------------------------
 | Broadcast Channels
@@ -18,4 +20,10 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 Broadcast::channel('private.chat.{id}', function ($user, $id){
     return true;
+});
+Broadcast::channel('user.{userId}', function (User $user, $userId) {
+
+    return $user->id === $userId;
+    //Для проверки всегда true
+    // return true;
 });

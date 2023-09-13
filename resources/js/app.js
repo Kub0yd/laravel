@@ -32,6 +32,17 @@ channel.subscribed( () => {
     }
 
 });
+
+const userChannel = Echo.private('user.' + userId);
+
+userChannel.subscribed( () => {
+    console.log('Слушаем событие')
+}).listen('.user.event', (e) => {
+    console.log(e);
+});
+// userChannel.listen('.user.event', (e) => {
+//     console.log(e);
+// });
 // const channel = Echo.channel('private.playground.1');
 
 // channel.subscribed( () => {
