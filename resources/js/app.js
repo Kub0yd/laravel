@@ -5,10 +5,12 @@ import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 
 Alpine.start();
+
 const channel = Echo.channel('public.status');
 
 channel.subscribed( () => {
     console.log('subscribed!')
+
 }).listen('.offer.status', (event) => {
 
 
@@ -37,16 +39,19 @@ const userChannel = Echo.private('user.' + userId);
 
 userChannel.subscribed( () => {
     console.log('Слушаем событие')
-}).listen('.user.event', (e) => {
-    console.log(e);
-});
-// userChannel.listen('.user.event', (e) => {
-//     console.log(e);
-// });
-// const channel = Echo.channel('private.playground.1');
 
-// channel.subscribed( () => {
-//     console.log('subscribed!');
-// }).listen('.playground', (event) => {
-//     console.log(event);
-// });
+
+}).listen('.user.event', (e) => {
+
+    let response = e.response;
+    switch (response.type) {
+        case 'income':
+            incomeVal(response);
+            break;
+
+        case 'loss':
+            lossVal(response);
+            break;
+    }
+});
+console.log();

@@ -86,7 +86,7 @@
                     <div class="card-footer text-muted offer-{{$offer->id}}-subs">
                         <div class="row">
                             <p class="text col">Подписок: {{$offer->subs->where('is_active', true)->count()}}</p>
-                            <p class="text-end col" >Расход: {{$offer->transactions->sum('cost')}}&#8381</p>
+                            <p class="text-end col" id="offer-loss" >Расход: {{$offer->transactions->sum('cost')}}&#8381</p>
                         </div>
 
                     </div>
@@ -96,6 +96,42 @@
             @endforeach
         </div>
     </div>
+    <div class="card border-dark mb-3">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col col-md-4">
+                    <div class="row align-items-center">
+                        <div class="col-2">
+                           st
+                        </div>
+                        <div class="col-3">
+                            #1
+                        </div>
+                        <div class="col-7">
+                            My page
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-auto">
+                    http://localhost/broadcasting/authdfdfdfdfdfdfdfdfdf
+                </div>
+                <div class="col-sm-auto">
+                    Subs: 11
+                </div>
+                <div class="col-sm-auto">
+                    Loss: 59
+                </div>
+                <div class="col-sm-auto order-12">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Активность</label>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
     @include('adTech.availableOffers')
 </div>
 @endsection
@@ -104,5 +140,6 @@
         var userId  = {{ Js::from(Auth::id())}};
     </script>
     <script src="/js/main.js"></script>
+    {{-- @vite(['public/js/main.js']) --}}
 @endsection
 

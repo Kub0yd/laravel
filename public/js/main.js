@@ -33,6 +33,27 @@ offerStatusCheckBox.forEach(item => {
         })
 })
 
+function incomeVal(response){
+
+    const offerSubsCount = document.querySelector('.offer-' + response.offer_id + '-subs');
+    const offerIncome = offerSubsCount.querySelector('#offer-income');
+    // console.log(response);
+    income = offerIncome.textContent.replace(/[^0-9,.]/g,"");
+    let newIncome = parseFloat(income) + response.income;
+    offerIncome.textContent = "Доход: " +(Number(newIncome.toFixed(2)).toString(10)) + "₽";
+}
+function lossVal(response){
+    const offerSubsCount = document.querySelector('.offer-' + response.offer_id + '-subs');
+    const offerLoss = offerSubsCount.querySelector('#offer-loss');
+    // console.log(response);
+    loss = offerLoss.textContent.replace(/[^0-9,.]/g,"");
+    let newLoss = parseFloat(loss) + parseFloat(response.loss);
+    // console.log( newLoss);
+    offerLoss.textContent = "Доход: " +(Number(newLoss.toFixed(2)).toString(10)) + "₽";
+}
+
+
+
 function offerStatusEvent(event){
 //переделать
     let offerSubButtom = document.querySelector('#offer-id-' + event.offer_id + '-button');
@@ -57,6 +78,7 @@ function updateSubs(response){
         offerSubsCount.textContent = "Подписок: " + response.offer_subs;
     }
 }
+
 
 
 function createCard (response){

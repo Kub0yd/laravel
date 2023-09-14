@@ -36,7 +36,7 @@
                     <div class="card-footer text-muted offer-{{$offer->id}}-subs">
                         <div class="row">
                             <p class="text col" >Подписок: {{$offer->subs->where('is_active', true)->count()}}</p>
-                            <p class="text-end col" >Доход: {{Auth::user()->transactions->where('offer_id', $offer->id)->sum('cost') *0.8}}&#8381</p>
+                            <p class="text-end col" id="offer-income">Доход: {{Auth::user()->transactions->where('offer_id', $offer->id)->sum('cost') *0.8}}&#8381</p>
                         </div>
 
                     </div>

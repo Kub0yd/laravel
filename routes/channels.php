@@ -23,7 +23,6 @@ Broadcast::channel('private.chat.{id}', function ($user, $id){
 });
 Broadcast::channel('user.{userId}', function (User $user, $userId) {
 
-    return $user->id === $userId;
-    //Для проверки всегда true
-    // return true;
+    return intval($user->id) === intval($userId);
+
 });

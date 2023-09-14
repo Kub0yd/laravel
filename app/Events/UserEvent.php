@@ -21,7 +21,7 @@ class UserEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(public User $user,,$message)
+    public function __construct(public User $user,  $message)
     {
         //
         $this->response = $message;
@@ -37,7 +37,7 @@ class UserEvent implements ShouldBroadcast
 
         return [
             // new PrivateChannel('user.'.Auth::id()),
-            new PrivateChannel('user.11'),
+            new PrivateChannel('user.'.$this->user->id),
         ];
     }
     public function broadcastAs(): string
