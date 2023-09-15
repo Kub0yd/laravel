@@ -11,6 +11,8 @@ use App\Models\Todo\Task;
 use App\Models\AdTech\Offer;
 use App\Models\AdTech\Sub;
 use App\Models\AdTech\Transaction;
+use App\Models\AdTech\Role;
+use App\Models\AdTech\Permission;
 
 class User extends Authenticatable
 {
@@ -71,5 +73,44 @@ class User extends Authenticatable
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+    public function hasRole($role)
+    {
+
+        return $this->roles->contains('name', $role);
+
+    }
+
+    public function assignRole($role)
+    {
+
+        $role = Role::whereName($role)->firstOrFail();
+
+        return $this->roles()->sync($role, false);
+    }
+
+    public function revokeRole($role)
+    {
+
+        $role = Role::whereName($role)->firstOrFail();
+
+
+        return $this->roles()->detach($role);
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'user_permissions');
+    }
+    public function hasPermissions($permission)
+    {
+        $permissions = $this->permissions;
+
+        return $permissions->contains('name', $permission);
+
     }
 }

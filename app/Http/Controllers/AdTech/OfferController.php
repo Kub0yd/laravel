@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\AdTech\Offer;
 use Illuminate\Http\Request;
 use App\Models\AdTech\Sub;
+use App\Models\AdTech\Role;
+use App\Models\AdTech\Permission;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Events\OfferStatus;

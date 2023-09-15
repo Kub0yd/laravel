@@ -96,21 +96,23 @@
             @endforeach
         </div>
     </div>
-    <div class="card border-dark mb-3">
-        <div class="container">
+
+        <div class="container rounded-pill border border-2 border-primary bg-dark text-white">
             <div class="row align-items-center">
-                <div class="col col-md-4">
+                <div class="col-sm-auto">
                     <div class="row align-items-center">
-                        <div class="col-2">
-                           st
+                        <div class="col">
+                            <svg class='offer-indicator' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-circle-fill" viewBox="0 0 16 20" >
+                                <circle cx="8" cy="8" r="8"/>
+                              </svg>
                         </div>
-                        <div class="col-3">
-                            #1
-                        </div>
-                        <div class="col-7">
-                            My page
+                        <div class="col">
+                            #1123
                         </div>
                     </div>
+                </div>
+                <div class="col-lg-auto">
+                    My page xfsd fsdf sdf sdfs fsd fsf s f
                 </div>
                 <div class="col-lg-auto">
                     http://localhost/broadcasting/authdfdfdfdfdfdfdfdfdf
@@ -121,7 +123,7 @@
                 <div class="col-sm-auto">
                     Loss: 59
                 </div>
-                <div class="col-sm-auto order-12">
+                <div class="col-sm order-12 d-flex justify-content-end">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
                         <label class="form-check-label" for="flexSwitchCheckDefault">Активность</label>
@@ -131,7 +133,7 @@
             </div>
         </div>
 
-    </div>
+
     @include('adTech.availableOffers')
 </div>
 @endsection
