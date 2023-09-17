@@ -13,9 +13,9 @@ offerStatusCheckBox.forEach(item => {
 
     item.addEventListener('change', function() {
 
-        let offerMark = this.closest('.card').querySelector('.my-offer');
-        let offerId = offerMark.textContent.substring(1);
-
+        // let offerMark = this.closest('.offer-id').querySelector('.offer-id');
+        let offerMark = this.closest('.container').querySelector('.offer-id');
+        let offerId = offerMark.textContent.trim().substring(1);
         let status = false;
         if (this.checked){
             status = true;
@@ -31,7 +31,7 @@ offerStatusCheckBox.forEach(item => {
 
 
         })
-})
+}) 
 
 function incomeVal(response){
 

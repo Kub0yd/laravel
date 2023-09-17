@@ -60,7 +60,7 @@
     <div class="input-group mt-5">
         <div class="row">
             @foreach ($offers as $offer)
-            <div class="col-sm">
+            {{-- <div class="col-sm">
                 <fieldset>
                 <div class="card border-dark mb-3" style="min-width: 220px;">
                     <div class="card-header">
@@ -92,13 +92,65 @@
                     </div>
                 </div>
                 </fieldset>
+            </div> --}}
+            <div class="container rounded-pill border border-2 border-secondary bg-dark bg-gradient text-white">
+                <div class="row align-items-center ">
+                    <div class="col-sm-auto">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <svg class='offer-indicator-active' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-circle-fill" viewBox="0 0 16 20" >
+                                    <circle cx="8" cy="8" r="8"/>
+                                  </svg>
+                            </div>
+                            <div class="col offer-id"  id="offer-id-{{$offer->id}}">
+                                #{{$offer->id}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-auto">
+                        {{$offer->title}}
+                    </div>
+                    <div class="col-lg-auto">
+                        <a href="{{$offer->URL}}" class="">{{$offer->URL}}</a>
+                    </div>
+                    <div  class="col-sm-auto">
+                        <span>Price per redirect: {{$offer->price}} &#8381</span>
+                    </div>
+                    <div class="col-lg order-12 d-flex justify-content-end">
+                        <div class="row align-items-center offer-{{$offer->id}}-subs">
+                            <div class="col-auto">
+                                Subs: {{$offer->subs->where('is_active', true)->count()}}
+                            </div>
+                            <div class="col-auto"  id="offer-loss">
+                                Расход: {{$offer->transactions->sum('cost')}}&#8381
+                            </div>
+                            <div class="col-sm order-12 d-flex justify-content-end">
+                                <div class="form-check form-switch">
+                                @if ($offer->is_active)
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked>
+                                @else
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                                @endif
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">Активность</label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- <div class="row justify-content-around">
+                    <div class="col-auto">
+                        <p>Разместите на своем сайте:
+                         <a href="" class="link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">http://localhost/broadcasting/authdfdfdfdfdfdfdfdfdf</a></p>
+                    </div>
+                </div> --}}
             </div>
             @endforeach
         </div>
     </div>
 
-        <div class="container rounded-pill border border-2 border-primary bg-dark text-white">
-            <div class="row align-items-center">
+        {{-- <div class="container rounded-pill border border-2 border-secondary bg-dark bg-gradient text-white">
+            <div class="row align-items-center ">
                 <div class="col-sm-auto">
                     <div class="row align-items-center">
                         <div class="col">
@@ -131,7 +183,14 @@
 
                 </div>
             </div>
-        </div>
+            <div class="row justify-content-around">
+                <div class="col-auto">
+                    <p>Разместите на своем сайте:
+                     <a href="" class="link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">http://localhost/broadcasting/authdfdfdfdfdfdfdfdfdf</a></p>
+                </div>
+            </div>
+        </div> --}}
+
 
 
     @include('adTech.availableOffers')
