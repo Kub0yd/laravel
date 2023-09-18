@@ -1,5 +1,7 @@
 let offerStatusCheckBox = document.querySelectorAll('#flexSwitchCheckDefault');
 let offerCardsPanel = document.querySelector('.offer-cards-panel');
+const offersPanel = document.querySelector('.offers-list');
+const subscribeButton =  document.querySelectorAll('.offer-subscribe');
 
 // var app = {{ Illuminate\Support\Js::from($array) }};
 // const userChannel = Echo.private('user.'.userId);
@@ -15,11 +17,22 @@ offerStatusCheckBox.forEach(item => {
 
         // let offerMark = this.closest('.offer-id').querySelector('.offer-id');
         let offerMark = this.closest('.container').querySelector('.offer-id');
+        let indicator = this.closest('.container').querySelector('.offer-indicator');
         let offerId = offerMark.textContent.trim().substring(1);
         let status = false;
         if (this.checked){
             status = true;
         }
+        if (status){
+            indicator.classList.remove('inactive-indicator');
+            indicator.classList.add('active-indicator');
+            indicator.style.fill = 'green'
+        }else{
+            indicator.classList.remove('active-indicator');
+            indicator.classList.add('inactive-indicator');
+            indicator.style.fill = 'gray'
+        }
+
 
             axios.post('main/1', {
                 // data: {offer_id: 2},
@@ -31,7 +44,29 @@ offerStatusCheckBox.forEach(item => {
 
 
         })
-}) 
+})
+
+subscribeButton.forEach(item => {
+
+    item.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const offerIdDiv = this.closest('.container').querySelector('.offer-id');
+        const buttonValue =  this.closest('.container').querySelector('.button-value');
+        let offerId = offerIdDiv.textContent.trim().substring(1);
+        if (buttonValue.value === 'unsubscribe'){
+            request = 'unsubscribe';
+        }else{
+            request = 'subscribtion';
+        }
+        axios.post('main', {
+            // data: {offer_id: 2},
+            _method: 'post',
+            type: request,
+            offer_id: offerId,
+        })
+    })
+})
 
 function incomeVal(response){
 
@@ -41,6 +76,20 @@ function incomeVal(response){
     income = offerIncome.textContent.replace(/[^0-9,.]/g,"");
     let newIncome = parseFloat(income) + response.income;
     offerIncome.textContent = "Доход: " +(Number(newIncome.toFixed(2)).toString(10)) + "₽";
+
+    //Statisctic modal
+    const offerStat = document.querySelector('#offer-' + response.offer_id + '-statistic');
+
+    const offerStatIncome = offerStat.querySelectorAll('.income-stat');
+    const offerStatrans = offerStat.querySelectorAll('.transitions-stat');
+
+    offerStatIncome.forEach(item => {
+        offerStatNewIncome = parseFloat(item.textContent) + parseFloat(response.income);
+        item.textContent = Number(offerStatNewIncome.toFixed(2)).toString(10);
+    })
+    offerStatrans.forEach(item => {
+        item.textContent = parseInt(item.textContent) + 1;
+    })
 }
 function lossVal(response){
     const offerSubsCount = document.querySelector('.offer-' + response.offer_id + '-subs');
@@ -49,23 +98,36 @@ function lossVal(response){
     loss = offerLoss.textContent.replace(/[^0-9,.]/g,"");
     let newLoss = parseFloat(loss) + parseFloat(response.loss);
     // console.log( newLoss);
-    offerLoss.textContent = "Доход: " +(Number(newLoss.toFixed(2)).toString(10)) + "₽";
+    offerLoss.textContent = "Расход: " +(Number(newLoss.toFixed(2)).toString(10)) + "₽";
+    //Statisctic modal
+    const offerStat = document.querySelector('#offer-' + response.offer_id + '-statistic');
+
+    const offerStatLoss = offerStat.querySelectorAll('.loss-stat');
+    const offerStatrans = offerStat.querySelectorAll('.transitions-stat');
+    console.log(offerStatrans);
+    offerStatLoss.forEach(item => {
+        offerStatNewLoss = parseFloat(item.textContent) + parseFloat(response.loss);
+        item.textContent = Number(offerStatNewLoss.toFixed(2)).toString(10);
+    })
+
+    offerStatrans.forEach(item => {
+        value = parseInt(item.textContent);
+        item.textContent = value + 1;
+    })
 }
 
 
 
 function offerStatusEvent(event){
 //переделать
-    let offerSubButtom = document.querySelector('#offer-id-' + event.offer_id + '-button');
+    let offerSubButton = document.querySelector('#offer-id-' + event.offer_id + '-button');
     let offerCard = document.querySelector('#offer-id-' + event.offer_id);
-    console.log(offerSubButtom);
-    if (event.is_active && offerSubButtom){
-        offerSubButtom.classList.remove('disabled');
-    }else if (!event.is_active && offerSubButtom) {
-        offerSubButtom.classList.add('disabled');
-    }else if (!offerSubButtom && !offerCard){
+    if (event.is_active && offerSubButton){
+        offerSubButton.classList.remove('disabled');
+    }else if (!event.is_active && offerSubButton) {
+        offerSubButton.classList.add('disabled');
+    }else if (!offerSubButton && !offerCard){
         createCard (event);
-        console.log(event);
     }
 }
 
@@ -75,71 +137,144 @@ function updateSubs(response){
 
     if (offerSubsCount){
         console.log(response);
-        offerSubsCount.textContent = "Подписок: " + response.offer_subs;
+        offerSubsCount.textContent = "Subs: " + response.offer_subs;
     }
 }
 
 
 
+//
 function createCard (response){
-    const colSmDiv = document.createElement("div");
-    colSmDiv.classList.add("col-sm");
+    let div = document.createElement("div");
+div.className = "row offer-cards-panel";
 
-    const cardDiv = document.createElement("div");
-    cardDiv.classList.add("card", "border-dark", "mb-3");
-    cardDiv.style.minWidth = "200px";
+let form = document.createElement("form");
+form.method = "POST";
+form.action = "http://localhost/main";
 
-    const cardHeaderDiv = document.createElement("div");
-    cardHeaderDiv.classList.add("card-header");
+let input = document.createElement("input");
+input.type = "hidden";
+input.name = "_token";
+input.value = "";
+form.appendChild(input);
 
-    const rowDiv = document.createElement("div");
-    rowDiv.classList.add("row");
+let container = document.createElement("div");
+container.className = "container rounded-pill border border-2 border-secondary bg-dark bg-gradient text-white";
 
-    const textP1 = document.createElement("p");
-    textP1.classList.add("text", "col");
-    textP1.textContent = response.title;
+let row1 = document.createElement("div");
+row1.className = "row align-items-center ";
 
-    const textEndP = document.createElement("p");
-    textEndP.classList.add("text-end", "col");
-    textEndP.id = "offer-id-" + response.offer_id;
-    textEndP.textContent = "#" + response.offer_id;
+let col1 = document.createElement("div");
+col1.className = "col-sm-auto";
 
-    rowDiv.appendChild(textP1);
-    rowDiv.appendChild(textEndP);
-    cardHeaderDiv.appendChild(rowDiv);
-    cardDiv.appendChild(cardHeaderDiv);
+let row2 = document.createElement("div");
+row2.className = "row align-items-center";
 
-    const cardBodyDiv = document.createElement("div");
-    cardBodyDiv.classList.add("card-body");
+let col2_1 = document.createElement("div");
+col2_1.className = "col";
 
-    const cardSubtitleH6 = document.createElement("h6");
-    cardSubtitleH6.classList.add("card-subtitle", "mb-2", "text-muted");
-    cardSubtitleH6.textContent = response.URL;
+let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+svg.setAttribute("class", "offer-indicator active-indicator");
+svg.setAttribute("width", "16");
+svg.setAttribute("height", "16");
+svg.setAttribute("fill", "green");
+svg.setAttribute("viewBox", "0 0 16 20");
 
-    const cartTextP = document.createElement("p");
-    cartTextP.classList.add("cart-text");
-    cartTextP.textContent = "By: " + response.creator;
+let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+circle.setAttribute("cx", "8");
+circle.setAttribute("cy", "8");
+circle.setAttribute("r", "8");
 
-    const rowDiv2 = document.createElement("div");
-    rowDiv2.classList.add("row");
+svg.appendChild(circle);
+col2_1.appendChild(svg);
 
-    const button = document.createElement("button");
-    button.classList.add("btn", "btn-primary", "col");
-    button.id = "offer-id-" + response.offer_id + "-button";
-    button.type = "submit";
-    button.textContent = "Sub";
+let col2_2 = document.createElement("div");
+col2_2.id = "offer-id-" + response.offer_id;
+col2_2.textContent = "#" + response.offer_id;
+col2_2.className = "col";
 
-    const textEndP2 = document.createElement("p");
-    textEndP2.classList.add("text-end", "col");
-    textEndP2.textContent = response.price + " ₽";
+row2.appendChild(col2_1);
+row2.appendChild(col2_2);
+col1.appendChild(row2);
 
-    rowDiv2.appendChild(button);
-    rowDiv2.appendChild(textEndP2);
-    cardBodyDiv.appendChild(cardSubtitleH6);
-    cardBodyDiv.appendChild(cartTextP);
-    cardBodyDiv.appendChild(rowDiv2);
-    cardDiv.appendChild(cardBodyDiv);
+let col3 = document.createElement("div");
+col3.className = "col-sm-auto";
+let span = document.createElement("span");
+span.className = "cart-text";
+span.textContent = "By: " + response.creator;
+col3.appendChild(span);
 
-    colSmDiv.appendChild(cardDiv);
-    offerCardsPanel.appendChild(colSmDiv);
+let col4 = document.createElement("div");
+col4.className = "col-lg-auto";
+col4.textContent = response.title;
+
+let col5 = document.createElement("div");
+col5.className = "col-lg-auto";
+let a = document.createElement("a");
+a.href = response.URL;
+a.textContent = response.URL;
+col5.appendChild(a);
+
+let col6 = document.createElement("div");
+col6.className = "col-sm-auto";
+let span2 = document.createElement("span");
+span2.textContent = "Price: "+ response.price + " ₽";
+col6.appendChild(span2);
+
+let col7 = document.createElement("div");
+col7.className = "col-lg order-12 d-flex justify-content-end";
+
+let row3 = document.createElement("div");
+row3.className = "row align-items-center offer-4-subs";
+
+let col8 = document.createElement("div");
+col8.className = "col-auto";
+col8.textContent = "Subs: 0";
+row3.appendChild(col8);
+
+let col9 = document.createElement("div");
+col9.className = "col-auto";
+col9.id = "offer-loss";
+let span3 = document.createElement("span");
+span3.className = "text-end col";
+span3.id = "offer-income";
+span3.textContent = "Доход: 0₽";
+col9.appendChild(span3);
+row3.appendChild(col9);
+
+let col10 = document.createElement("div");
+col10.className = "col-sm order-12 d-flex justify-content-end";
+let button = document.createElement("button");
+button.className = "btn btn-primary col";
+button.id = "offer-id-4-button";
+button.type = "submit";
+button.textContent = "Sub";
+let input1 = document.createElement("input");
+input1.type = "hidden";
+input1.name = "subscription";
+input1.value = "subscribe";
+let input2 = document.createElement("input");
+input2.type = "hidden";
+input2.name = "offer_id";
+input2.value = "4";
+
+col10.appendChild(button);
+col10.appendChild(input1);
+col10.appendChild(input2);
+
+row3.appendChild(col10);
+col7.appendChild(row3);
+
+row1.appendChild(col1);
+row1.appendChild(col3);
+row1.appendChild(col4);
+row1.appendChild(col5);
+row1.appendChild(col6);
+row1.appendChild(col7);
+
+container.appendChild(row1);
+form.appendChild(container);
+div.appendChild(form);
+
+offersPanel.appendChild(div);
 }

@@ -80,17 +80,17 @@ class OfferController extends Controller
         //         return back();
         //             break;
         // }
-
-        if ($request->subscription == 'subscribe'){
+            // dd($request->type);
+        if ($request->type === "subscribtion"){
 
             (new SubService())->subscribe($request);
             return back();
-        }else if($request->subscription == 'unsubscribe'){
+        }else if($request->type === 'unsubscribe'){
             (new SubService())->unsubscribe($request);
             return back();
-            // dd($request->subscription);
+
         }else{
-            var_dump($request->subscribtion);
+
             $validated = $request->validate([
                 'title' => 'required',
             ]);

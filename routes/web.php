@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
         });
     Route::resource('/main', App\Http\Controllers\AdTech\OfferController::class);
     Route::resource('/subs', App\Http\Controllers\AdTech\SubController::class);
+    Route::resource('/admin', App\Http\Controllers\AdTech\AdminController::class);
 
 
 

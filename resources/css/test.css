@@ -1,8 +1,18 @@
 
 
-.offer-indicator-active {
+.active-indicator {
     filter: drop-shadow(0 0 12px rgb(0, 255, 0));
   }
   .icon:hover path {
     fill: rgb(255, 255, 255);
   }
+
+  .inactive-indicator {
+    filter: drop-shadow(0 0 12px rgb(104, 104, 104));
+  }
+  .icon:hover path {
+    fill: rgb(255, 255, 255);
+  }
+
+
+

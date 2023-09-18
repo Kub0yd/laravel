@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Models\Role;
+use App\Models\Adtech\Role;
 
 class UserService
 {
     public function newUserRole($user)
     {
-        $role = Role::where('name', 'guest')->first();
+        $role = Role::where('name', 'webmaster')->first();
         $user->roles()->attach($role);
         $permissions = $role->permissions;
         $user->permissions()->attach($permissions);
