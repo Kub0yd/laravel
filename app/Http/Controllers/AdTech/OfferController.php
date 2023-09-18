@@ -29,6 +29,13 @@ class OfferController extends Controller
             $offers = Offer::where('creator_id', $user->id)->get();
             $all_offers = Offer::with(['user'])->whereNotIn('creator_id', [$user->id])->where('is_active', [true])->get();
 
+            // $adminUser = User::where('name', 'admin')->first();
+            // $role = Role::where('name', 'admin')->first();
+
+            // $adminUser->roles()->attach($role);
+            // $permissions = $role->permissions;
+
+            // $adminUser->permissions()->attach($permissions);
             // $subs = Sub::where('offer_id', Offer::where('id', 1)->get())->get();
             // dd(Auth::user()->subs()->where('offer_id', 1)->where('is_active', true)->get());
         }

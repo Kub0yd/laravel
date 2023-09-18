@@ -133,8 +133,8 @@
                                 <tbody>
                                 <tr>
                                     <th scope="row">День</th>
-                                    <td class="income-stat income-day">{{Auth::user()->transactions->where('offer_id', $offer->id)->where('created_at', '>=', now()->firstOfYear()->format('Y-m-d'))
-                                        ->where('created_at', '<', now()->addYear()->firstOfYear()->format('Y-m-d'))
+                                    <td class="income-stat income-day">{{Auth::user()->transactions->where('offer_id', $offer->id)->where('created_at', '>=', now()->format('Y-m-d'))
+                                        ->where('created_at', '<', now()->addDay()->format('Y-m-d'))
                                         ->sum('cost')*0.8}}</td>
                                     <td class="transitions-stat transitions-day">{{Auth::user()->transactions->where('offer_id', $offer->id)->where('created_at', '>=', now()->format('Y-m-d'))
                                         ->where('created_at', '<', now()->addDay()->format('Y-m-d'))
