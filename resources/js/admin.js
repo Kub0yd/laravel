@@ -35,23 +35,11 @@ channel.subscribed( () => {
 
 });
 
-const userChannel = Echo.private('user.' + userId);
+const adminChannel = Echo.channel('admin.event');
+adminChannel.subscribed( () => {
+    console.log('admin!!')
 
-userChannel.subscribed( () => {
-    console.log('Слушаем событие')
-
-
-}).listen('.user.event', (e) => {
-
-    let response = e.response;
-    switch (response.type) {
-        case 'income':
-            incomeVal(response);
-            break;
-
-        case 'loss':
-            lossVal(response);
-            break;
-    }
 });
+
+
 

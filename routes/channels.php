@@ -26,3 +26,8 @@ Broadcast::channel('user.{userId}', function (User $user, $userId) {
     return intval($user->id) === intval($userId);
 
 });
+Broadcast::channel('admin.channel', function (User $user) {
+
+    return $user->hasPermissions('administration');
+
+});
