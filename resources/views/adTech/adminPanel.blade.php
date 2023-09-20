@@ -50,8 +50,8 @@
             </div> --}}
             {{-- <div  class='border border-2 border-secondary bg-dark bg-gradient text-white'> --}}
                 <!-- Modal -->
-                <div class="modal fade " id="offer-control" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
+                <div class="modal fade" id="offer-control" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog  modal-xl modal-dialog-centered modal-dialog-scrollable ">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLongTitle">Statistic</h5>
@@ -59,6 +59,50 @@
                             </div>
 
                             <div class="modal-body">
+                                <div class='card'>
+                                    <div class='row'>
+                                        <div class='col-sm-1'>
+                                            id
+                                        </div>
+                                        <div class='col-md-2'>
+                                            User
+                                        </div>
+                                        <div class='col-auto'>
+                                            https://sdsdsdsdjjjflsafjafjalfjasfasfj
+                                        </div>
+                                        <div class='col'>
+                                            income
+                                        </div>
+                                        <div class='col'>
+                                            <div class='row'>
+                                                <div class='col'>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                                        <label class="form-check-label" for="flexRadioDefault1">
+                                                         webmaster
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class='col'>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                                        <label class="form-check-label" for="flexRadioDefault2">
+                                                          admin
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class='col'>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                                        <label class="form-check-label" for="flexRadioDefault2">
+                                                          creator
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -74,8 +118,8 @@
                           <th scope="col">Creator</th>
                           <th scope="col">Title</th>
                           <th scope="col">URL</th>
-                          <th scope="col">Price</th>
-                          <th scope="col">All-time Subs</th>
+                          <th scope="col">Link price</th>
+                          <th scope="col">All Subs</th>
                           <th scope="col">Loss</th>
                         </tr>
                       </thead>
