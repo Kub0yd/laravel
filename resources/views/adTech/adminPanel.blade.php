@@ -75,7 +75,7 @@
                           <th scope="col">Title</th>
                           <th scope="col">URL</th>
                           <th scope="col">Price</th>
-                          <th scope="col">Subs</th>
+                          <th scope="col">All-time Subs</th>
                           <th scope="col">Loss</th>
                         </tr>
                       </thead>
@@ -104,7 +104,7 @@
                                 <span>{{$offer->price}} &#8381</span>
                             </td>
                             <td>
-                                <span>{{$offer->subs->where('is_active', true)->count()}}</span>
+                                <span>{{$offer->subs->count()}}</span>
                             </td>
                             <td>
                                 {{$offer->transactions->sum('cost')}}&#8381
@@ -138,7 +138,9 @@
 </div>
 @endsection
 @section('scripts')
-
+    <script>
+        var userId  = {{ Js::from(Auth::id())}};
+    </script>
     <script src="/js/admin.js"></script>
     {{-- @vite(['public/js/main.js']) --}}
 @endsection

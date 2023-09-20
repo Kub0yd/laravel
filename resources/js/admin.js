@@ -35,11 +35,22 @@ channel.subscribed( () => {
 
 });
 
-const adminChannel = Echo.channel('admin.event');
+const adminChannel = Echo.private('admin.channel');
 adminChannel.subscribed( () => {
-    console.log('admin!!')
+    test();
+
+
+}).listen('.admin.event', (event) => {
+    // console.log(123);
+    let response = event.response;
+    console.log(response);
+
+    switch (response.type) {
+        case 'sendOfferInfo':
+            createOfferInfo(response);
+        break;
+    }
 
 });
-
 
 

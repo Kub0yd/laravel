@@ -8,7 +8,7 @@ class UserService
 {
     public function newUserRole($user)
     {
-        $role = Role::where('name', 'webmaster')->first();
+        $role = Role::where('name', 'user')->first();
         $user->roles()->attach($role);
         $permissions = $role->permissions;
         $user->permissions()->attach($permissions);

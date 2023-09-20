@@ -18,6 +18,7 @@ class AdminEvent implements ShouldBroadcast
 
     public $response;
 
+
     /**
      * Create a new event instance.
      */

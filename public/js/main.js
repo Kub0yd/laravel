@@ -51,8 +51,9 @@ subscribeButton.forEach(item => {
     item.addEventListener('click', function(e) {
         e.preventDefault();
 
-        const offerIdDiv = this.closest('.container').querySelector('.offer-id');
-        const buttonValue =  this.closest('.container').querySelector('.button-value');
+        const offerIdDiv = item.closest('.container').querySelector('.offer-id');
+        const buttonValue =  item.closest('.container').querySelector("input[name='subscription']");
+        console.log(buttonValue.value)
         let offerId = offerIdDiv.textContent.trim().substring(1);
         if (buttonValue.value === 'unsubscribe'){
             request = 'unsubscribe';

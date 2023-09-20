@@ -73,7 +73,7 @@
                     <div class="col-lg order-12 d-flex justify-content-end">
                         <div class="row align-items-center offer-{{$offer->id}}-subs">
                             <div class="col-auto offer-statistic-button">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#offer-{{$offer->id}}-statistic">
+                                <button type="button" class="btn  btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#offer-{{$offer->id}}-statistic">
                                     Statis
                                  </button>
                             </div>
@@ -85,13 +85,13 @@
                             </div>
                             @if (Auth::user()->subs()->where('offer_id', $offer->id)->where('is_active', true)->get()->count())
                             <div class="col-sm order-12 d-flex justify-content-end offer-subscribe">
-                                <button class="btn btn-secondary" id="offer-id-{{$offer->id}}-button" type="submit">Отписаться</button>
+                                <button class="btn btn-sm btn-secondary" id="offer-id-{{$offer->id}}-button" type="submit">Отписаться</button>
                                 <input class='button-value' type="hidden" name="subscription" value='unsubscribe'>
                                 <input type="hidden" name="offer_id" value="{{$offer->id}}">
                             </div>
                             @else
                             <div class="col-sm order-12 d-flex justify-content-end">
-                                <button class="btn btn-primary col offer-subscribe" id="offer-id-{{$offer->id}}-button" type="submit">Sub</button>
+                                <button class="btn btn-sm btn-primary col offer-subscribe" id="offer-id-{{$offer->id}}-button" type="submit">Sub</button>
                                 <input type="hidden" name="subscription" value='subscribe'>
                                 <input type="hidden" name="offer_id" value="{{$offer->id}}">
                             </div>
