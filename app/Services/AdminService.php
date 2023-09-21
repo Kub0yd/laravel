@@ -29,6 +29,7 @@ class AdminService
                 'user_income' => $userOfferIncome,
                 'user_roles' => $user->roles->all(),
                 'user_personalURL' => $user->subs()->where('offer_id', $offer->id)->value('link'),
+                "is_active" => $sub->is_active,
             ];
         }
         $test  = [

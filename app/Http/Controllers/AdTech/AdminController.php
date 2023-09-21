@@ -11,6 +11,7 @@ use App\Events\AdminEvent;
 use App\Services\AdminService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+Use DB;
 
 
 class AdminController extends Controller
@@ -24,8 +25,8 @@ class AdminController extends Controller
         $user = Auth::user();
         // dd($user->roles->all());
         if ($user->hasPermissions('administration')){
-            $offers = Offer::all();
-            $allUsers = User::all();
+            $offers = Offer::orderBy('id')->cursorPaginate(15);
+            $allUsers = User::orderBy('id')->cursorPaginate(6);
             return view('adTech.adminPanel',  compact('offers', 'allUsers'));
 
 

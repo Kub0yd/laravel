@@ -1,10 +1,12 @@
 import './bootstrap';
-
+import './charts.js';
 import Alpine from 'alpinejs';
+
 
 window.Alpine = Alpine;
 
 Alpine.start();
+
 
 const channel = Echo.channel('public.status');
 
@@ -38,7 +40,6 @@ channel.subscribed( () => {
 const adminChannel = Echo.private('admin.channel');
 adminChannel.subscribed( () => {
     test();
-
 
 }).listen('.admin.event', (event) => {
     // console.log(123);
