@@ -37,6 +37,7 @@ class SubService
             OfferStatus::dispatch([
                 'type' => 'subStatus',
                 'offer_id' => $offer->id,
+                'offer_url' => $offer->URL,
                 'offer_subs' => $offer->subs->where('is_active', true)->count()]);
         }
 

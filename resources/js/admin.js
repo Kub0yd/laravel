@@ -1,5 +1,5 @@
 import './bootstrap';
-import './charts.js';
+// import './charts.js';
 import Alpine from 'alpinejs';
 
 
@@ -49,9 +49,15 @@ adminChannel.subscribed( () => {
     switch (response.type) {
         case 'sendOfferInfo':
             createOfferInfo(response);
+
+        break;
+        case 'sendUserInfo':
+            createUserInfo(response);
+        break;
+        case 'test':
+            // console.log(response);
         break;
     }
 
 });
-
 

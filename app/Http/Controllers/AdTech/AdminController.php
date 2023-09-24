@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AdTech\Offer;
+use App\Models\AdTech\Transaction;
 use App\Events\AdminEvent;
 use App\Services\AdminService;
 use Illuminate\Support\Facades\Log;
@@ -25,9 +26,10 @@ class AdminController extends Controller
         $user = Auth::user();
         // dd($user->roles->all());
         if ($user->hasPermissions('administration')){
-            $offers = Offer::orderBy('id')->cursorPaginate(15);
-            $allUsers = User::orderBy('id')->cursorPaginate(6);
-            return view('adTech.adminPanel',  compact('offers', 'allUsers'));
+            $offers = Offer::all();
+            $allUsers = User::orderBy('id')->cursorPaginate(10);
+            $transactions = Transaction::all();
+            return view('adTech.adminPanel',  compact('offers', 'allUsers', 'transactions'));
 
 
         }else{
@@ -50,11 +52,25 @@ class AdminController extends Controller
     {
         //
         // (new AdminService())->sendInfo($request);
-        if ($request->type === "getOfferInfo"){
-            (new AdminService())->sendInfo($request);
-        }else{
-
+        switch ($request->type) {
+            case 'getOfferInfo':
+                (new AdminService())->sendOfferInfo($request);
+                break;
+            case 'getUserInfo':
+                (new AdminService())->sendUserInfo($request);
+                break;
+            case 'updateUserRoles':
+                (new AdminService())->updateUserRoles($request);
+                break;
+            default:
+                # code...
+                break;
         }
+        // if ($request->type === "getOfferInfo"){
+        //     (new AdminService())->sendInfo($request);
+        // }else{
+
+        // }
     }
 
     /**

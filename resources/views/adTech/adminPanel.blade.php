@@ -2,7 +2,7 @@
 
 @section('content')
 <div class='container'>
-    <h3>Панель</h3>
+    <h3>Доход системы: {{$transactions->sum('cost') * 0.2}}₽</h3>
     <div class="row">
         <div class='col offers-list'>
 
@@ -104,7 +104,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -114,25 +114,65 @@
                     <div class="modal-dialog  modal-xl modal-dialog-centered modal-dialog-scrollable ">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Statistic</h5>
+                                {{-- <h5 class="modal-title" id="exampleModalLongTitle">Statistic</h5> --}}
+                                <div class="row">
+                                    <div class="col-auto">
+                                        Username:
+                                        <span class="stat-user-name">qawawsdwdw</span>
+                                    </div>
+                                    <div class="col-auto">
+                                        User ID:
+                                        <span class="stat-user-id">123</span>
+                                    </div>
+
+                                </div>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                             </div>
 
                             <div class="modal-body">
                                 <div class="row">
                                     <div class="col">
-                                        <h5>User offers</h5>
+                                        <h5>User subs</h5>
                                         <table class="table table-sm table-hover">
                                             <thead>
                                                 <tr>
                                                     <th scope="col">#</th>
                                                     <th scope="col">Id</th>
+                                                    <th scope="col">Creator</th>
                                                     <th scope="col">Title</th>
-                                                    <th scope="col">Webmaster URL</th>
-                                                    <th scope="col">Total income</th>
-                                                    <th scope="col" colspan='3'>User roles</th>
+                                                    <th scope="col">User URL</th>
+                                                    <th scope="col">User Income</th>
+                                                    <th scope="col">Transactions count</th>
                                                 </tr>
-                                                </thead>
+                                            </thead>
+                                            <tbody class="user-subs">
+                                                <tr >
+                                                    <th scope="row">
+                                                        <svg class='offer-indicator active-indicator' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-circle-fill" viewBox="0 0 16 20" >
+                                                            <circle cx="8" cy="8" r="8"/>
+                                                        </svg>
+                                                    </th>
+                                                    <td>
+                                                        <span class='offer-id'>#12</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="creator" >Test</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="sub-title" >Title</span>
+                                                    </td>
+                                                    <td>
+                                                        <a href="http://localhost/admin" class="">http://localhost/admin</a>
+                                                    </td>
+                                                    <td>
+                                                        <span>1 &#8381</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>1231</span>
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
                                         </table>
                                     </div>
                                     <div class="col-lg-4">
@@ -140,7 +180,7 @@
                                         <div class='row roles-checkbox'>
                                             <div class='col'>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault1">
+                                                    <input class="form-check-input role-webmaster role-input" type="checkbox" value="webmaster" name="flexRadioDefault" id="flexRadioDefault1">
                                                     <label class="form-check-label" for="flexRadioDefault1">
                                                      webmaster
                                                     </label>
@@ -148,7 +188,7 @@
                                             </div>
                                             <div class='col'>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault2">
+                                                    <input class="form-check-input role-admin role-input" type="checkbox" value="admin" name="flexRadioDefault" id="flexRadioDefault2">
                                                     <label class="form-check-label" for="flexRadioDefault2">
                                                       admin
                                                     </label>
@@ -156,7 +196,7 @@
                                             </div>
                                             <div class='col'>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault2">
+                                                    <input class="form-check-input role-creator role-input" type="checkbox" value="creator" name="flexRadioDefault" id="flexRadioDefault2">
                                                     <label class="form-check-label" for="flexRadioDefault2">
                                                       creator
                                                     </label>
@@ -166,11 +206,71 @@
                                                 <button type="button" class="btn btn-sm btn-secondary" id="post-user-role">Save</button>
                                             </div>
                                         </div>
+                                        <h5>User statistic</h5>
+                                        <table class="table table-sm table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Total income</th>
+                                                    <th>Total transactions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td id="total-income">123</td>
+                                                    <td id="total-transactions">213123</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <h5>User offers</h5>
+                                        <table class="table table-sm table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Id</th>
+                                                    <th scope="col">Title</th>
+                                                    <th scope="col">URL</th>
+                                                    <th scope="col">Price</th>
+                                                    <th scope="col">Subs</th>
+                                                    <th scope="col">Loss</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="user-offers">
+                                                <tr >
+                                                    <th scope="row">
+                                                        <svg class='offer-indicator active-indicator' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-circle-fill" viewBox="0 0 16 20" >
+                                                            <circle cx="8" cy="8" r="8"/>
+                                                        </svg>
+                                                    </th>
+                                                    <td>
+                                                        <span class='offer-id'>#12</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="creator" >Test</span>
+                                                    </td>
+                                                    <td>
+                                                        <a href="http://localhost/admin" class="">http://localhost/admin</a>
+                                                    </td>
+                                                    <td>
+                                                        <span>1 &#8381</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>1231</span>
+                                                    </td>
+                                                    <td>
+                                                        <span>321</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" id='user-infopanel-close' data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -235,7 +335,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $offers->links() }}
+                {{-- {{ $offers->links() }} --}}
             {{-- </div> --}}
 
         </div>
@@ -244,10 +344,13 @@
                 @foreach ($allUsers as $user)
                 <div class="row">
                     <div class="col">
+                        <span class="user-id">{{$user->id}}</span>
+                    </div>
+                    <div class="col user-name">
                         <p>{{$user->name}}</p>
                     </div>
                     <div class="col">
-                        <button type="button" class="btn btn-sm btn-primary modal-act" data-bs-toggle="modal" data-bs-target="#user-control">
+                        <button type="button" class="btn btn-sm btn-primary user-modal-act" data-bs-toggle="modal" data-bs-target="#user-control">
                             Управление
                          </button>
                     </div>
