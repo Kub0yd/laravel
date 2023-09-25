@@ -15,6 +15,7 @@ channel.subscribed( () => {
 
 
     let response = event.response;
+    console.log(response);
     switch (response.type) {
         case 'offerStatus':
             offerStatusEvent(response);
@@ -29,7 +30,7 @@ channel.subscribed( () => {
             break;
 
         case 'subStatus':
-            updateSubs(response);
+            updateSubs(response.data);
             break;
     }
 
@@ -51,6 +52,10 @@ userChannel.subscribed( () => {
 
         case 'loss':
             lossVal(response);
+            break;
+
+        case 'subInfo':
+            addSubInfo(response.data);
             break;
     }
 });

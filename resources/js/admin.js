@@ -17,6 +17,7 @@ channel.subscribed( () => {
 
 
     let response = event.response;
+    console.log(response);
     switch (response.type) {
         case 'offerStatus':
             offerStatusEvent(response);

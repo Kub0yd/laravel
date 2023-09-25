@@ -27,8 +27,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('/tasks', App\Http\Controllers\Todo\TaskController::class);
-    Route::get('/', function () {
-            return view('welcome');
+    // Route::get('/', function () {
+    //         return view('welcome');
+    //     });
+        Route::get('/', function() {
+            return redirect('/main');
         });
     Route::resource('/main', App\Http\Controllers\AdTech\OfferController::class);
     Route::resource('/subs', App\Http\Controllers\AdTech\SubController::class);

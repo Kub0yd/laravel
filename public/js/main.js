@@ -51,13 +51,34 @@ subscribeButton.forEach(item => {
     item.addEventListener('click', function(e) {
         e.preventDefault();
 
-        const offerIdDiv = item.closest('.container').querySelector('.offer-id');
-        const buttonValue =  item.closest('.container').querySelector("input[name='subscription']");
-        console.log(buttonValue.value)
+        let offerIdDiv = item.closest('.container').querySelector('.offer-id');
+        let buttonValue =  item.closest('.container').querySelector("input[name='subscription']");
+        let subsPanel = document.querySelector('.subs-list');
+        let offerDiv = item.closest('.offer-cards-panel');
+        let subButton = item.querySelector('.btn');
+
         let offerId = offerIdDiv.textContent.trim().substring(1);
+        request = '';
         if (buttonValue.value === 'unsubscribe'){
+
+            // subButton = item.querySelector('.btn');
+            buttonValue.value = 'subscribe';
+            subButton.classList.remove('btn-secondary');
+            subButton.classList.add('btn-primary');
+            subButton.textContent = 'Sub';
+            offersPanel.append(offerDiv);
+            personalUrl = offerDiv.querySelector('.user-url');
+            personalUrl.remove();
             request = 'unsubscribe';
-        }else{
+
+        }else if(buttonValue.value === 'subscribe'){
+
+            subsPanel.append(offerDiv);
+            buttonValue.value = 'unsubscribe';
+            subButton.classList.remove('btn-primary');
+            subButton.classList.add('btn-secondary');
+            subButton.textContent = 'Unsub';
+
             request = 'subscribtion';
         }
         axios.post('main', {
@@ -71,7 +92,7 @@ subscribeButton.forEach(item => {
 
 function incomeVal(response){
 
-    const offerSubsCount = document.querySelector('.offer-' + response.offer_id + '-subs');
+    const offerSubsCount = document.querySelector('.offer-card-id-' + response.offer_id);
     const offerIncome = offerSubsCount.querySelector('#offer-income');
     // console.log(response);
     income = offerIncome.textContent.replace(/[^0-9,.]/g,"");
@@ -93,7 +114,7 @@ function incomeVal(response){
     })
 }
 function lossVal(response){
-    const offerSubsCount = document.querySelector('.offer-' + response.offer_id + '-subs');
+    const offerSubsCount = document.querySelector('.offer-card-id-' + response.offer_id);
     const offerLoss = offerSubsCount.querySelector('#offer-loss');
     // console.log(response);
     loss = offerLoss.textContent.replace(/[^0-9,.]/g,"");
@@ -132,19 +153,49 @@ function offerStatusEvent(event){
     }
 }
 
-function updateSubs(response){
 
+function updateSubs(response){
+    // console.log(response);
     let offerSubsCount = document.querySelector('.offer-' + response.offer_id + '-subs');
 
     if (offerSubsCount){
-        console.log(response);
+        // console.log(response);
         offerSubsCount.textContent = "Subs: " + response.offer_subs;
     }
 }
 
+function addSubInfo(response){
+    // console.log(response);
+    createUserSubURL(response);
 
+}
 
 //
+
+function createUserSubURL(data){
+    let sub = document.querySelector('.offer-card-id-'+data.offer_id);
+    console.log(sub);
+    let row = document.createElement('div');
+    row.classList.add('row', 'justify-content-around', 'user-url');
+
+    let col = document.createElement('div');
+    col.classList.add('col-auto');
+
+    let span = document.createElement('span');
+    span.textContent = 'Разместите на своем сайте: ';
+
+    let link = document.createElement('a');
+    link.href = data.sub_url;
+    link.classList.add('link-success', 'link-offset-2', 'link-underline-opacity-25', 'link-underline-opacity-100-hover');
+    link.textContent = data.sub_url;
+
+    span.appendChild(link);
+    col.appendChild(span);
+    row.appendChild(col);
+
+    sub.appendChild(row);
+}
+
 function createCard (response){
     let div = document.createElement("div");
 div.className = "row offer-cards-panel";

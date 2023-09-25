@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Events\OfferStatus;
 use App\Services\OfferService;
 use App\Services\SubService;
+
 use App\Http\Controllers\AdTech\SubController;
 
 class OfferController extends Controller
@@ -27,13 +28,19 @@ class OfferController extends Controller
 
             $user = Auth::user();
             $offers = Offer::where('creator_id', $user->id)->get();
-            $all_offers = Offer::with(['user'])->whereNotIn('creator_id', [$user->id])->where('is_active', [true])->get();
-
+            // $all_offers = Offer::with(['user'])->whereNotIn('creator_id', [$user->id])->where('is_active', [true])->get();
+            $userId = $user->id;
+            $allOffers = Offer::where('creator_id', '<>', $userId)
+                ->whereDoesntHave('subs', function ($query) use ($userId) {
+                    $query->where('user_id', $userId)->where('is_active', true);
+                })
+                ->get();
+            $userSubs = $user->subs->where('is_active', true);
 
             // $subs = Sub::where('offer_id', Offer::where('id', 1)->get())->get();
             // dd(Auth::user()->subs()->where('offer_id', 1)->where('is_active', true)->get());
         }
-        return view('adTech.main',  compact('offers', 'all_offers'));
+        return view('adTech.main',  compact('offers', 'userSubs', 'allOffers'));
     }
 
     /**

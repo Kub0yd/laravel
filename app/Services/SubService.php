@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Events\OfferStatus;
 use Illuminate\Support\Str;
+use App\Services\DispatchService;
 
 class SubService
 {
@@ -33,12 +34,26 @@ class SubService
                 $sub->is_active = true;
                 $sub->save();
             }
-
-            OfferStatus::dispatch([
-                'type' => 'subStatus',
+            $sub = Auth::user()->subs()->where('offer_id', $offer->id)->first();
+            $offerResponseData = [
                 'offer_id' => $offer->id,
                 'offer_url' => $offer->URL,
-                'offer_subs' => $offer->subs->where('is_active', true)->count()]);
+                'offer_subs' => $offer->subs->where('is_active', true)->count(),
+            ];
+            $response = DispatchService::createResponse('subStatus', $offerResponseData);
+            DispatchService::OfferStatusChannelSend( $response);
+
+            $userSubUpdateData = [
+                'sub_id' => $sub->id,
+                'sub_url' => $sub->link,
+                'offer_id' => $offer->id,
+            ];
+            DispatchService::UserChannelSend(Auth::id(), DispatchService::createResponse('subInfo', $userSubUpdateData));
+            // OfferStatus::dispatch([
+            //     'type' => 'subStatus',
+            //     'offer_id' => $offer->id,
+            //     'offer_url' => $offer->URL,
+            //     'offer_subs' => $offer->subs->where('is_active', true)->count()]);
         }
 
     }
@@ -56,10 +71,11 @@ class SubService
                 $sub->is_active = false;
                 $sub->save();
 
-                OfferStatus::dispatch([
-                    'type' => 'subStatus',
+                $offerResponseData = [
                     'offer_id' => $offer->id,
-                    'offer_subs' => $offer->subs->where('is_active', true)->count()]);
+                    'offer_subs' => $offer->subs->where('is_active', true)->count()
+                ];
+                DispatchService::OfferStatusChannelSend(DispatchService::createResponse('subStatus', $offerResponseData));
             }else{
                 //ex
             }
