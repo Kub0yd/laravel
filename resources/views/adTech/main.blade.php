@@ -55,7 +55,7 @@
     </div>
 
 
-    <h3>Ваши предложения</h3>
+    <h3  class="title">Ваши предложения</h3>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
         New offer
     </button>
@@ -178,7 +178,7 @@
         </div>
         @endforeach
     </div>
-    <h3>Подписки</h3>
+    <h3  class="title">Подписки</h3>
     @include('adTech.sublist')
     @include('adTech.availableOffers')
 </div>

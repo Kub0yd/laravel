@@ -34,6 +34,7 @@ class OfferController extends Controller
                 ->whereDoesntHave('subs', function ($query) use ($userId) {
                     $query->where('user_id', $userId)->where('is_active', true);
                 })
+                ->where('is_active', true)
                 ->get();
             $userSubs = $user->subs->where('is_active', true);
 

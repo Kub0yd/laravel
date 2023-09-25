@@ -65,7 +65,7 @@
                     </div>
                 </div>
             </div>
-            @if (Auth::user()->subs()->where('offer_id', $sub->offer->id)->where('is_active', true)->get()->count())
+            @if ($sub->offer->is_active)
             <div class="row justify-content-around user-url">
                 <div class="col-auto">
                     <span>Разместите на своем сайте:

@@ -142,15 +142,21 @@ function lossVal(response){
 
 function offerStatusEvent(event){
 //переделать
-    let offerSubButton = document.querySelector('#offer-id-' + event.offer_id + '-button');
-    let offerCard = document.querySelector('#offer-id-' + event.offer_id);
-    if (event.is_active && offerSubButton){
-        offerSubButton.classList.remove('disabled');
-    }else if (!event.is_active && offerSubButton) {
-        offerSubButton.classList.add('disabled');
-    }else if (!offerSubButton && !offerCard){
-        createCard (event);
+    let offerCard = document.querySelector('.offer-card-id-'+event.offer_id);
+
+    if (offerCard && offerCard.closest('.offers-list') && !event.is_active){
+        console.log(offerCard);
+        offerCard.remove();
     }
+    // let offerSubButton = document.querySelector('#offer-id-' + event.offer_id + '-button');
+    // let offerCard = document.querySelector('#offer-id-' + event.offer_id);
+    // if (event.is_active && offerSubButton){
+    //     offerSubButton.classList.remove('disabled');
+    // }else if (!event.is_active && offerSubButton) {
+    //     offerSubButton.classList.add('disabled');
+    // }else if (!offerSubButton && !offerCard){
+    //     createCard (event);
+    // }
 }
 
 
@@ -169,6 +175,14 @@ function addSubInfo(response){
     createUserSubURL(response);
 
 }
+
+let test = document.querySelector('.offer-card-id-1');
+test.addEventListener('click', () => {
+    if (test.closest('.container').classList.contains('subs-list')){
+            console.log(123)
+    }
+    console.log(test.closest('.offers-list'))
+})
 
 //
 

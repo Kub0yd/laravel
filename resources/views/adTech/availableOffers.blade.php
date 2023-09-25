@@ -1,4 +1,4 @@
-<h3>Доступные предложения</h3>
+<h3 class="title">Доступные предложения</h3>
 {{-- <div class="input-group mt-5" > --}}
 <div class='container offers-list'>
         @foreach ($allOffers as $offer)
