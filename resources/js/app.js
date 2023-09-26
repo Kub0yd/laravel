@@ -45,6 +45,7 @@ userChannel.subscribed( () => {
 }).listen('.user.event', (e) => {
 
     let response = e.response;
+
     switch (response.type) {
         case 'income':
             incomeVal(response);
@@ -56,6 +57,9 @@ userChannel.subscribed( () => {
 
         case 'subInfo':
             addSubInfo(response.data);
+            break;
+        case 'updateSubStatus':
+            updateSubStatus(response.data);
             break;
     }
 });

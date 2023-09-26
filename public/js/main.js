@@ -141,22 +141,15 @@ function lossVal(response){
 
 
 function offerStatusEvent(event){
-//переделать
+
     let offerCard = document.querySelector('.offer-card-id-'+event.offer_id);
 
     if (offerCard && offerCard.closest('.offers-list') && !event.is_active){
-        console.log(offerCard);
+        // console.log(offerCard);
         offerCard.remove();
+    }else if(!offerCard){
+        createCard (event);
     }
-    // let offerSubButton = document.querySelector('#offer-id-' + event.offer_id + '-button');
-    // let offerCard = document.querySelector('#offer-id-' + event.offer_id);
-    // if (event.is_active && offerSubButton){
-    //     offerSubButton.classList.remove('disabled');
-    // }else if (!event.is_active && offerSubButton) {
-    //     offerSubButton.classList.add('disabled');
-    // }else if (!offerSubButton && !offerCard){
-    //     createCard (event);
-    // }
 }
 
 
@@ -169,10 +162,36 @@ function updateSubs(response){
         offerSubsCount.textContent = "Subs: " + response.offer_subs;
     }
 }
+function updateSubStatus(response){
+    // let offerCard = document.querySelector('.offer-card-id-'+response.offer_id);
+
+    response.offer_active ? activateSub(response) : disactivateSub(response);
+}
+
+function disactivateSub(response){
+    let offerCard = document.querySelector('.offer-card-id-'+response.offer_id);
+    let indicator = offerCard.querySelector('svg');
+    let urlField = offerCard.querySelector('.user-url')
+    indicator.classList.remove('active-indicator');
+    indicator.classList.add('disabled-indicator');
+    indicator.style.fill = 'red'
+    urlField.remove();
+}
+function activateSub(response){
+    console.log(response.offer_id);
+    let offerCard = document.querySelector('.offer-card-id-'+response.offer_id);
+    let indicator = offerCard.querySelector('svg');
+
+    indicator.classList.remove('disabled-indicator');
+    indicator.classList.add('active-indicator');
+    indicator.style.fill = 'green'
+    createUserSubURL(response.offer_id, response.user_link);
+
+}
 
 function addSubInfo(response){
     // console.log(response);
-    createUserSubURL(response);
+    createUserSubURL(response.offer_id, response.sub_url);
 
 }
 
@@ -186,9 +205,9 @@ test.addEventListener('click', () => {
 
 //
 
-function createUserSubURL(data){
-    let sub = document.querySelector('.offer-card-id-'+data.offer_id);
-    console.log(sub);
+function createUserSubURL(offer_id, sub_url){
+    let sub = document.querySelector('.offer-card-id-'+offer_id);
+
     let row = document.createElement('div');
     row.classList.add('row', 'justify-content-around', 'user-url');
 
@@ -199,9 +218,9 @@ function createUserSubURL(data){
     span.textContent = 'Разместите на своем сайте: ';
 
     let link = document.createElement('a');
-    link.href = data.sub_url;
+    link.href = sub_url;
     link.classList.add('link-success', 'link-offset-2', 'link-underline-opacity-25', 'link-underline-opacity-100-hover');
-    link.textContent = data.sub_url;
+    link.textContent = sub_url;
 
     span.appendChild(link);
     col.appendChild(span);
@@ -214,18 +233,18 @@ function createCard (response){
     let div = document.createElement("div");
 div.className = "row offer-cards-panel";
 
-let form = document.createElement("form");
-form.method = "POST";
-form.action = "http://localhost/main";
+// let form = document.createElement("form");
+// form.method = "POST";
+// form.action = "http://localhost/main";
 
-let input = document.createElement("input");
-input.type = "hidden";
-input.name = "_token";
-input.value = "";
-form.appendChild(input);
+// let input = document.createElement("input");
+// input.type = "hidden";
+// input.name = "_token";
+// input.value = "";
+// form.appendChild(input);
 
 let container = document.createElement("div");
-container.className = "container rounded-pill border border-2 border-secondary bg-dark bg-gradient text-white";
+container.className = "container rounded-pill border border-2 border-secondary bg-dark bg-gradient text-white offer-card-id-" + response.offer_id;
 
 let row1 = document.createElement("div");
 row1.className = "row align-items-center ";
@@ -339,8 +358,8 @@ row1.appendChild(col6);
 row1.appendChild(col7);
 
 container.appendChild(row1);
-form.appendChild(container);
-div.appendChild(form);
+// form.appendChild(container);
+div.appendChild(container);
 
 offersPanel.appendChild(div);
 }

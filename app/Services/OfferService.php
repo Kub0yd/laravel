@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Events\OfferStatus;
-
+use App\Services\DispatchService;
 
 class OfferService
 {
@@ -17,6 +17,8 @@ class OfferService
 
         $offerId = $requestData->offer_id;
         $offer = Offer::find($offerId);
+        $offerSubs = $offer->subs->where('is_active', true);
+        // DispatchService::OfferStatusChannelSend([$offerSubs]);
 
         if (Auth::user()->id == $offer->creator_id){
             $offer->is_active = $requestData->is_active;
@@ -30,6 +32,16 @@ class OfferService
                 'creator' => Auth::user()->name,
                 'title' => $offer->title,
                 'URL' => $offer->URL]);
+            foreach ($offerSubs as $sub)
+            {
+                $data = [
+                    'offer_id' => $offer->id,
+                    'user_link' => $sub->link,
+                    'offer_active' => $offer->is_active,
+                ];
+                DispatchService::UserChannelSend($sub->user_id, DispatchService::createResponse('updateSubStatus', $data));
+
+            }
         }
         else {
             OfferStatus::dispatch(array('type' => 'error', 'user' => Auth::user()->name, 'offer' => $offer->title ));

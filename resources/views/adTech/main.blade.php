@@ -14,6 +14,7 @@
             </ul>
         </div>
     @endif
+    @if (Auth::user()->hasPermissions('can_create_offers'))
     <!-- Modal -->
     <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -178,9 +179,12 @@
         </div>
         @endforeach
     </div>
+    @endif
     <h3  class="title">Подписки</h3>
+@if (Auth::user()->hasPermissions('sub_offers'))
     @include('adTech.sublist')
     @include('adTech.availableOffers')
+@endif
 </div>
 @endsection
 @section('scripts')

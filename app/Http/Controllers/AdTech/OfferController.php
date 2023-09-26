@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Events\OfferStatus;
 use App\Services\OfferService;
 use App\Services\SubService;
+use App\Services\DispatchService;
 
 use App\Http\Controllers\AdTech\SubController;
 
@@ -24,6 +25,9 @@ class OfferController extends Controller
     public function index()
     {
         //
+        // $offer = Offer::find(5);
+        // $offerSubs = $offer->subs->where('is_active', true);
+        // dd($offerSubs);
         if(Auth::check()){
 
             $user = Auth::user();
@@ -112,6 +116,15 @@ class OfferController extends Controller
                 $offer->creator_id = Auth::id();
                 $offer->save();
 
+                $data = [
+                    'offer_id' => $offer->id,
+                    'price' => $offer->price,
+                    'creator' => Auth::user()->name,
+                    'title' => $offer->title,
+                    'URL' => $offer->URL,
+                ];
+                
+                DispatchService::AdminChannelSend(DispatchService::createResponse('newOffer', $data));
                 // OfferStatus::dispatch(array('type' => 'createOffer', 'title' => $request->title, 'URL' => $request->URL, 'price' => $request->price, 'creator' => Auth::user()->name));
 
             } catch (\Exception $e) {

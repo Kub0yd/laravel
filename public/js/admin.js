@@ -54,6 +54,35 @@ userModalButton.forEach(item => {
 function test(){
     console.log('admin even 2');
 }
+
+function offerStatusEvent(event){
+
+    let offerTable = document.querySelectorAll('.offer-id-'+event.offer_id);
+
+    if (offerTable){
+        offerTable.forEach(offer =>{
+            if (event.is_active){
+                let offerSvg = offer.querySelector('svg');
+                offerSvg.classList.remove('disabled-indicator');
+                offerSvg.classList.add('active-indicator');
+                offerSvg.style.fill = 'green'
+            }else{
+                let offerSvg = offer.querySelector('svg');
+                offerSvg.classList.remove('active-indicator');
+                offerSvg.classList.add('disabled-indicator');
+                offerSvg.style.fill = 'red'
+            }
+
+        })
+    }
+}
+function generateOfferTable(response){
+    let mainPageOffers = document.querySelector('.offers-table');
+    createOfferTable(mainPageOffers, response);
+    mainPageOffers.appendChild(generateControlLine());
+    createUserOffersTable(response)
+}
+
 function createOfferInfo(response){
 
     var tbody = document.querySelector('.offer-user-info');
@@ -65,6 +94,13 @@ function createOfferInfo(response){
         // console.log(offer);
     })
 
+}
+function updateSubs(response){
+    console.log(123);
+    let offerTable = document.querySelectorAll('.offer-id-'+response.offer_id);
+    offerTable.forEach(offer => {
+        offer.querySelector('.offer-subs').textContent = response.offer_subs;
+    })
 }
 
 saveButton.addEventListener('click', () =>{
@@ -89,7 +125,78 @@ saveButton.addEventListener('click', () =>{
         }
     }
 })
+function createOfferTable(selector, response){
 
+    const tr = document.createElement('tr');
+    tr.classList.add('table-dark', 'offer-id-'+ response.offer_id);
+
+    const th = document.createElement('th');
+    th.setAttribute('scope', 'row');
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.classList.add('offer-indicator', 'disabled-indicator');
+    svg.setAttribute('width', '16');
+    svg.setAttribute('height', '16');
+    svg.setAttribute('fill', 'red');
+    svg.setAttribute('viewBox', '0 0 16 20');
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', '8');
+    circle.setAttribute('cy', '8');
+    circle.setAttribute('r', '8');
+
+    svg.appendChild(circle);
+    th.appendChild(svg);
+    tr.appendChild(th);
+
+    const td1 = document.createElement('td');
+    const span1 = document.createElement('span');
+    span1.classList.add('offer-id');
+    span1.textContent = '#'+response.offer_id;
+    td1.appendChild(span1);
+    tr.appendChild(td1);
+
+    const td2 = document.createElement('td');
+    const span2 = document.createElement('span');
+    span2.classList.add('creator');
+    span2.textContent = response.creator;
+    td2.appendChild(span2);
+    tr.appendChild(td2);
+
+    const td3 = document.createElement('td');
+    const span3 = document.createElement('span');
+    span3.classList.add('cart-text');
+    span3.textContent = response.title;
+    td3.appendChild(span3);
+    tr.appendChild(td3);
+
+    const td4 = document.createElement('td');
+    const a = document.createElement('a');
+    a.setAttribute('href', response.URL);
+    a.classList.add('url');
+    a.textContent = response.URL;
+    td4.appendChild(a);
+    tr.appendChild(td4);
+
+    const td5 = document.createElement('td');
+    const span4 = document.createElement('span');
+    span4.textContent = response.price + '₽';
+    td5.appendChild(span4);
+    tr.appendChild(td5);
+
+    const td6 = document.createElement('td');
+    const span5 = document.createElement('span');
+    span5.textContent = '0';
+    td6.appendChild(span5);
+    tr.appendChild(td6);
+
+    const td7 = document.createElement('td');
+    td7.textContent = '0₽';
+    tr.appendChild(td7);
+    selector.appendChild(tr);
+
+
+}
 function createUserInfo(response){
 
     const userSubsTable = document.querySelector('.user-subs');
@@ -235,7 +342,7 @@ function generateSubsTable(offer){
 
 function createUserOffersTable (data){
     const tr = document.createElement('tr');
-
+    tr.classList.add('offer-id-' + data.offer_id);
     const th = document.createElement('th');
     th.setAttribute('scope', 'row');
 
@@ -287,12 +394,22 @@ function createUserOffersTable (data){
 
     const td5 = document.createElement('td');
     const span5 = document.createElement('span');
-    span5.textContent = data.offer_subs;
+    if (data.offer_subs){
+        span5.textContent = data.offer_subs;
+    }else{
+        span5.textContent = 0;
+    }
+    span5.classList.add("offer-subs");
+
     td5.appendChild(span5);
 
     const td6 = document.createElement('td');
     const span6 = document.createElement('span');
-    span6.textContent = data.offer_loss + '₽';
+    if (data.offer_loss){
+        span6.textContent = data.offer_loss + '₽';
+    }else{
+        span6.textContent =  '0₽';
+    }
     td6.appendChild(span6);
 
     tr.appendChild(th);
@@ -311,7 +428,7 @@ function createUserSubsTable (data){
 
 
     const tr = document.createElement('tr');
-
+    tr.classList.add('offer-id-' + data.offer_id);
     const th = document.createElement('th');
     th.setAttribute('scope', 'row');
 
@@ -381,4 +498,32 @@ function createUserSubsTable (data){
 
     const userSubsTable = document.querySelector('.user-subs');
     userSubsTable.appendChild(tr);
+}
+function generateControlLine(){
+
+    const tr = document.createElement('tr');
+    tr.classList.add('table-dark');
+
+    const td1 = document.createElement('td');
+    tr.appendChild(td1);
+
+    const td2 = document.createElement('td');
+    td2.setAttribute('colspan', '3');
+    const button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.classList.add('btn', 'btn-sm', 'btn-primary', 'modal-act');
+    button.setAttribute('data-bs-toggle', 'modal');
+    button.setAttribute('data-bs-target', '#offer-control');
+    button.textContent = 'Статистика';
+    td2.appendChild(button);
+    tr.appendChild(td2);
+
+    const td3 = document.createElement('td');
+    td3.setAttribute('colspan', '3');
+    tr.appendChild(td3);
+
+    const td4 = document.createElement('td');
+    tr.appendChild(td4);
+
+    return tr;
 }

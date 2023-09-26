@@ -23,16 +23,16 @@ channel.subscribed( () => {
             offerStatusEvent(response);
             break;
 
-        case 'error':
-            console.log(response);
-            break;
+        // case 'error':
+        //     console.log(response);
+        //     break;
 
-        case 'createOffer':
-            createCard(response);
-            break;
+        // case 'createOffer':
+        //     createCard(response);
+        //     break;
 
         case 'subStatus':
-            updateSubs(response);
+            updateSubs(response.data);
             break;
     }
 
@@ -57,6 +57,9 @@ adminChannel.subscribed( () => {
         break;
         case 'test':
             // console.log(response);
+        break;
+        case 'newOffer':
+            generateOfferTable(response.data);
         break;
     }
 
