@@ -104,10 +104,13 @@ class AdminService
     public function updateUserRoles($request)
     {
         $user = User::find($request->user_id);
+        $user->permissions()->detach();
+        $user->roles()->detach();
         if ($request->user_roles){
             foreach ($request->user_roles as $role) {
 
                 // (new UserService())->assignRole($user, $role);
+
                 $this->assignRole($user, $role);
 
             }

@@ -42,5 +42,14 @@ class RolePermissionSeeder extends Seeder
             'permission_id' => $guest->id,
             'role_id' => $user->id,
         ]);
+        DB::table('permission_role')->insert([
+            'permission_id' => $can_create_offers->id,
+            'role_id' => $admin->id,
+        ]);
+        DB::table('permission_role')->insert([
+            'permission_id' => $sub_offers->id,
+            'role_id' => $admin->id,
+        ]);
+
     }
 }

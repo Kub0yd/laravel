@@ -96,10 +96,38 @@ function createOfferInfo(response){
 
 }
 function updateSubs(response){
-    console.log(123);
     let offerTable = document.querySelectorAll('.offer-id-'+response.offer_id);
     offerTable.forEach(offer => {
         offer.querySelector('.offer-subs').textContent = response.offer_subs;
+    })
+}
+
+function updateTransactionsValues(response){
+    let offers = document.querySelectorAll('.offer-id-'+response.offer_id);
+    offers.forEach(offer => {
+
+        lossField = offer.querySelector('.loss-val');
+        if (lossField){
+            lossValue = parseFloat(lossField.textContent) + parseFloat(response.loss);
+            lossField.textContent = Number(lossValue.toFixed(2)).toString(10) + '₽';
+        }
+        incomeField = offer.querySelector('.user-income');
+        transactionField = offer.querySelector('.transactions');
+        if (incomeField){
+            incomeValue = parseFloat(incomeField.textContent) + parseFloat(response.income);
+            incomeField.textContent = Number(incomeValue.toFixed(2)).toString(10) + '₽';
+            transactionField.textContent = Number(transactionField.textContent) + 1;
+        }
+        if (offer.closest('.row').classList.contains('user-stat')){
+            parentRow = offer.closest('.row');
+            totalIncome = parentRow.querySelector('#total-income');
+            totalTransactions = parentRow.querySelector('#total-transactions');
+
+            totalIncomeValue = parseFloat(totalIncome.textContent) + parseFloat(response.income);
+            totalIncome.textContent = Number(totalIncomeValue.toFixed(2)).toString(10) + '₽';
+            totalTransactions.textContent = Number(totalTransactions.textContent) + 1;
+        }
+
     })
 }
 
@@ -325,7 +353,19 @@ function generateSubsTable(offer){
         span5.textContent = span5.textContent + role.name + " ";
     })
     // span5.textContent = 'Webmaster, Admin, Creator';
+
     td5.appendChild(span5);
+
+    td6 = document.createElement('td');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.classList.add('btn', 'btn-sm', 'btn-danger');
+    button.dataset.bsToggle = 'modal';
+    button.dataset.bsTarget = '#attempts-error';
+    button.textContent = 'ошибки переходов';
+
+    td6.appendChild(button);
+
 
     // Добавляем элементы в родительский элемент
     tr.appendChild(th);
@@ -334,6 +374,7 @@ function generateSubsTable(offer){
     tr.appendChild(td3);
     tr.appendChild(td4);
     tr.appendChild(td5);
+    tr.appendChild(td6);
 
     // Находим родительский элемент и добавляем созданный элемент в него
     var tbody = document.querySelector('.offer-user-info');
@@ -405,6 +446,7 @@ function createUserOffersTable (data){
 
     const td6 = document.createElement('td');
     const span6 = document.createElement('span');
+    span6.classList.add('loss-val')
     if (data.offer_loss){
         span6.textContent = data.offer_loss + '₽';
     }else{
@@ -480,11 +522,13 @@ function createUserSubsTable (data){
 
     const td5 = document.createElement('td');
     const span5 = document.createElement('span');
+    span5.classList.add('user-income');
     span5.textContent =  parseFloat(data.sub_income) + '₽';
     td5.appendChild(span5);
 
     const td6 = document.createElement('td');
     const span6 = document.createElement('span');
+    span6.classList.add('transactions');
     span6.textContent = data.sub_transactions;
     td6.appendChild(span6);
 

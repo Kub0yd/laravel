@@ -25,7 +25,8 @@
                                                     <th scope="col">Username</th>
                                                     <th scope="col">Webmaster URL</th>
                                                     <th scope="col">All time income value</th>
-                                                    <th scope="col" colspan='3'>Roles</th>
+                                                    <th scope="col">Roles</th>
+                                                    <th scope="col">Transaction errors</th>
                                                 </tr>
                                             </thead>
                                             <tbody class='offer-user-info'>
@@ -50,6 +51,11 @@
                                                     <td>
                                                         <span>Webmaster, Admin, Creator</span>
                                                     </td>
+                                                    {{-- <td>
+                                                        <button type="button" class="btn btn-sm btn-primary modal-act" data-bs-toggle="modal" data-bs-target="#attempts-error">
+                                                            ошибки переходов
+                                                         </button>
+                                                    </td> --}}
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -65,6 +71,43 @@
                         </div>
                     </div>
                 </div>
+                {{-- END MODAL --}}
+                                <!-- Modal -->
+                                <div class="modal fade" id="attempts-error" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog  modal-sm modal-dialog-centered modal-dialog-scrollable ">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Errors log</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class='row'>
+                                                    <div class="col">
+                                                        <table  class="table table-sm  table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Offer id</th>
+                                                                    <th scope="col">Date</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody class='offer-user-info'>
+                                                                <tr >
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="col-md-3">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- END MODAL --}}
                 <!-- Modal -->
                 <div class="modal fade" id="user-control" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog  modal-xl modal-dialog-centered modal-dialog-scrollable ">
@@ -86,7 +129,7 @@
                             </div>
 
                             <div class="modal-body">
-                                <div class="row">
+                                <div class="row user-stat">
                                     <div class="col">
                                         <h5>User subs</h5>
                                         <table class="table table-sm table-hover">
@@ -121,10 +164,10 @@
                                                         <a href="http://localhost/admin" class="">http://localhost/admin</a>
                                                     </td>
                                                     <td>
-                                                        <span>1 &#8381</span>
+                                                        <span class="income-val">1 &#8381</span>
                                                     </td>
                                                     <td>
-                                                        <span>1231</span>
+                                                        <span class="transations">1231</span>
                                                     </td>
 
                                                 </tr>
@@ -217,7 +260,7 @@
                                                         <span></span>
                                                     </td>
                                                     <td>
-                                                        <span></span>
+                                                        <span class="loss-val"></span>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -231,6 +274,7 @@
                         </div>
                     </div>
                 </div>
+                {{-- END MODAL --}}
                 <table class="table table-sm table-bordered table-dark table-hover">
                     <thead>
                         <tr>
@@ -278,7 +322,7 @@
                             <td>
                                 <span class="offer-subs">{{$offer->subs->count()}}</span>
                             </td>
-                            <td>
+                            <td class="loss-val">
                                 {{$offer->transactions->sum('cost')}}&#8381
                             </td>
                         </tr>
@@ -325,7 +369,40 @@
         </div>
     </div>
 </div>
-@include('adTech.adminStat')
+{{-- @include('adTech.adminStat') --}}
+<table class="table table-sm table-bordered table-dark table-hover">
+    <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Id</th>
+        </tr>
+      </thead>
+    <tbody class="offers-table">
+        <tr>
+            <td>1</td>
+            <td>
+                <div class="row">
+                    <span>1123123123</span>
+                </div>
+                <div class="row">
+                    <span>112312313</span>
+                </div>
+                <div class="row">
+                    <span>1131313</span>
+                </div>
+                <div class="row">
+                    <span>1123131</span>
+                </div>
+                <div class="row">
+                    <span>1</span>
+                </div>
+                <div class="row">
+                    <span>1</span>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
 @endsection
 
 @section('scripts')

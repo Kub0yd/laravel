@@ -126,7 +126,7 @@ function lossVal(response){
 
     const offerStatLoss = offerStat.querySelectorAll('.loss-stat');
     const offerStatrans = offerStat.querySelectorAll('.transitions-stat');
-    console.log(offerStatrans);
+
     offerStatLoss.forEach(item => {
         offerStatNewLoss = parseFloat(item.textContent) + parseFloat(response.loss);
         item.textContent = Number(offerStatNewLoss.toFixed(2)).toString(10);
@@ -195,13 +195,7 @@ function addSubInfo(response){
 
 }
 
-let test = document.querySelector('.offer-card-id-1');
-test.addEventListener('click', () => {
-    if (test.closest('.container').classList.contains('subs-list')){
-            console.log(123)
-    }
-    console.log(test.closest('.offers-list'))
-})
+
 
 //
 
