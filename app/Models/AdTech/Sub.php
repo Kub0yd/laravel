@@ -18,4 +18,8 @@ class Sub extends Model
     {
         return $this->belongsTo(Offer::class, 'offer_id', 'id');
     }
+    public function badTransactions()
+    {
+        return $this->hasMany(BadTransaction::class);
+    }
 }

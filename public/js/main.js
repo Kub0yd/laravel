@@ -79,7 +79,7 @@ subscribeButton.forEach(item => {
             subButton.classList.add('btn-secondary');
             subButton.textContent = 'Unsub';
 
-            request = 'subscribtion';
+            request = 'subscription';
         }
         axios.post('main', {
             // data: {offer_id: 2},

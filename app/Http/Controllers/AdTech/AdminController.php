@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AdTech\Offer;
 use App\Models\AdTech\Transaction;
+use App\Models\AdTech\Sub;
 use App\Events\AdminEvent;
 use App\Services\AdminService;
 use Illuminate\Support\Facades\Log;
@@ -23,6 +24,12 @@ class AdminController extends Controller
     public function index()
     {
         //
+        // $sub = Sub::find(2);
+        // dd($sub->badTransactions()
+        // ->select(DB::raw('DATE(created_at) as day'), 'ip')
+        // ->orderBy('created_at', 'desc')
+        // ->get()
+        // ->groupBy('day'));
         $user = Auth::user();
         // dd($user->roles->all());
         if ($user->hasPermissions('administration')){
@@ -61,6 +68,9 @@ class AdminController extends Controller
                 break;
             case 'updateUserRoles':
                 (new AdminService())->updateUserRoles($request);
+                break;
+            case 'getOfferErrors':
+                (new AdminService())->sendOfferErrors($request);
                 break;
             default:
                 # code...

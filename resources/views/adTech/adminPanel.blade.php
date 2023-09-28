@@ -51,11 +51,11 @@
                                                     <td>
                                                         <span>Webmaster, Admin, Creator</span>
                                                     </td>
-                                                    {{-- <td>
-                                                        <button type="button" class="btn btn-sm btn-primary modal-act" data-bs-toggle="modal" data-bs-target="#attempts-error">
+                                                    <td>
+                                                        <button type="button" class="btn btn-sm btn-primary modal-act errors" data-bs-toggle="modal" data-bs-target="#attempts-error">
                                                             ошибки переходов
                                                          </button>
-                                                    </td> --}}
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -74,7 +74,7 @@
                 {{-- END MODAL --}}
                                 <!-- Modal -->
                                 <div class="modal fade" id="attempts-error" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                    <div class="modal-dialog  modal-sm modal-dialog-centered modal-dialog-scrollable ">
+                                    <div class="modal-dialog  modal-lg modal-dialog-centered modal-dialog-scrollable ">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLongTitle">Errors log</h5>
@@ -83,15 +83,36 @@
                                             <div class="modal-body">
                                                 <div class='row'>
                                                     <div class="col">
-                                                        <table  class="table table-sm  table-hover">
+                                                        <h3>subscription ID</h3>
+                                                        <table  class="table table-md  table-hover">
                                                             <thead>
                                                                 <tr>
-                                                                    <th scope="col">Offer id</th>
-                                                                    <th scope="col">Date</th>
+                                                                    <th scope="col">sub id</th>
+                                                                    <th scope="col">Sub username</th>
+                                                                    <th scope="col">date</th>
+                                                                    <th scope="col">ip</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody class='offer-user-info'>
+                                                            <tbody class='offer-errors'>
                                                                 <tr >
+                                                                    <td>2</td>
+                                                                    <td>Username</td>
+                                                                    <td>
+                                                                        <div class="row">
+                                                                            23/02/123
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            23/02/123
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="row">
+                                                                            172.16.158
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            172.1456
+                                                                        </div>
+                                                                    </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -291,7 +312,7 @@
                     <tbody class="offers-table">
                         @foreach ($offers as $offer)
 
-                        <tr class="table-dark offer-id-{{$offer->id}}">
+                        <tr class="table-dark offer-id-{{$offer->id}} offer-line" >
                             <th scope="row">
                                 @if ($offer->is_active)
                                 <svg class='offer-indicator active-indicator' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-circle-fill" viewBox="0 0 16 20" >
@@ -334,9 +355,12 @@
                                     Статистика
                                  </button>
                             </td>
-                            <td colspan="3">
+                            <td colspan="2">
                             </td>
-                            <td>
+                            <td colspan="2">
+                                <button type="button" class="btn btn-sm btn-danger modal-act errors" data-bs-toggle="modal" data-bs-target="#attempts-error">
+                                    ошибки переходов
+                                 </button>
                             </td>
                         </tr>
                         @endforeach
@@ -370,39 +394,7 @@
     </div>
 </div>
 {{-- @include('adTech.adminStat') --}}
-<table class="table table-sm table-bordered table-dark table-hover">
-    <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Id</th>
-        </tr>
-      </thead>
-    <tbody class="offers-table">
-        <tr>
-            <td>1</td>
-            <td>
-                <div class="row">
-                    <span>1123123123</span>
-                </div>
-                <div class="row">
-                    <span>112312313</span>
-                </div>
-                <div class="row">
-                    <span>1131313</span>
-                </div>
-                <div class="row">
-                    <span>1123131</span>
-                </div>
-                <div class="row">
-                    <span>1</span>
-                </div>
-                <div class="row">
-                    <span>1</span>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
+
 @endsection
 
 @section('scripts')

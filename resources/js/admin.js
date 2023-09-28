@@ -64,6 +64,9 @@ adminChannel.subscribed( () => {
         case 'transaction':
             updateTransactionsValues(response.data);
             break;
+        case 'sendOfferErrors':
+            createErrorsTable(response.data);
+            break;
     }
 
 });

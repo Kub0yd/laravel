@@ -94,7 +94,7 @@ class OfferController extends Controller
         //             break;
         // }
             // dd($request->type);
-        if ($request->type === "subscribtion"){
+        if ($request->type === "subscription"){
 
             (new SubService())->subscribe($request);
             return back();
@@ -123,7 +123,7 @@ class OfferController extends Controller
                     'title' => $offer->title,
                     'URL' => $offer->URL,
                 ];
-                
+
                 DispatchService::AdminChannelSend(DispatchService::createResponse('newOffer', $data));
                 // OfferStatus::dispatch(array('type' => 'createOffer', 'title' => $request->title, 'URL' => $request->URL, 'price' => $request->price, 'creator' => Auth::user()->name));
 

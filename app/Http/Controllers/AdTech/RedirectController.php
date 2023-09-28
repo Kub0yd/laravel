@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\AdTech\Offer;
 use App\Models\AdTech\Sub;
 use App\Models\AdTech\Transaction;
+use App\Models\AdTech\BadTransaction;
 use App\Events\UserEvent;
 use App\Models\User;
 use App\Events\OfferStatus;
@@ -58,10 +59,16 @@ class RedirectController extends Controller
                 'driver' => 'single',
                 'path' => storage_path('logs/test.log'),
               ])->info('Transaction offer_id:'.$offer->id.", from webmaster:".$sub->user->name);
-              abort(404);
 
             return redirect($offer->URL);
 
+        }else if($sub && (!($sub->is_active) || !($offer->is_active))){
+            $badTransaction = new BadTransaction();
+            $badTransaction->sub_id = $sub->id;
+            $badTransaction->ip = $request->ip();
+
+            $badTransaction->save();
+            abort(404);
         }else{
             abort(404);
         }

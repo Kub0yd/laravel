@@ -6,6 +6,11 @@ const userPanelCloseButton = document.querySelector('#user-infopanel-close')
 const saveButton = document.querySelector('#post-user-role');
 const panelUserName = document.querySelector('.stat-user-name');
 const panelUserId = document.querySelector('.stat-user-id');
+//кнопка ошибки переходов
+const getErrorsButton = document.querySelectorAll('.errors');
+const erorrsTable = document.querySelector('.offer-errors');
+
+
 
 offerModalButton.forEach(item => {
     item.addEventListener('click', () =>{
@@ -51,6 +56,7 @@ userModalButton.forEach(item => {
 
     })
 })
+
 function test(){
     console.log('admin even 2');
 }
@@ -337,6 +343,7 @@ function generateSubsTable(offer){
 
     var td3 = document.createElement('td');
     var a = document.createElement('a');
+    a.classList.add('personal-url');
     a.href = offer.user_personalURL;
     a.textContent = offer.user_personalURL;
     td3.appendChild(a);
@@ -359,7 +366,7 @@ function generateSubsTable(offer){
     td6 = document.createElement('td');
     const button = document.createElement('button');
     button.type = 'button';
-    button.classList.add('btn', 'btn-sm', 'btn-danger');
+    button.classList.add('btn', 'btn-sm', 'btn-danger', 'errors');
     button.dataset.bsToggle = 'modal';
     button.dataset.bsTarget = '#attempts-error';
     button.textContent = 'ошибки переходов';
@@ -570,4 +577,77 @@ function generateControlLine(){
     tr.appendChild(td4);
 
     return tr;
+}
+getErrorsButton.forEach(button => {
+
+    button.addEventListener('click', () =>{
+
+        offerTable = button.parentNode.parentNode.previousElementSibling;
+        offerId = offerTable.querySelector('.offer-id').textContent.substring(1);
+        erorrsTable.innerHTML = "";
+        axios.post('admin', {
+            // data: {offer_id: 2},
+            type: 'getOfferErrors',
+            _method: 'post',
+            offer_id: offerId,
+        })
+    })
+})
+function createErrorsTable(response)
+{
+    response.forEach(element => {
+        if (element.errors.length > 0){
+            console.log(element);
+
+            generateErrorsTable(element);
+        }
+    });
+}
+function generateErrorsTable(element){
+    const tableRow = document.createElement("tr");
+
+    const subIdCell = document.createElement("td");
+    subIdCell.textContent = element.sub_id;
+    tableRow.appendChild(subIdCell);
+
+    const usernameCell = document.createElement("td");
+    usernameCell.textContent = element.webmaster;
+    tableRow.appendChild(usernameCell);
+
+    const badTransactionsCell = document.createElement("td");
+    element.errors.forEach(element => {
+        const DayDiv = document.createElement("div");
+        DayDiv.classList.add("row");
+        let date = new Date(element.created_at);
+        DayDiv.textContent = date.toLocaleString();
+        badTransactionsCell.appendChild(DayDiv);
+    });
+    // const firstDayDiv = document.createElement("div");
+    // firstDayDiv.classList.add("row");
+    // firstDayDiv.textContent = "23/02/123";
+    // badTransactionsCell.appendChild(firstDayDiv);
+    // const secondDayDiv = document.createElement("div");
+    // secondDayDiv.classList.add("row");
+    // secondDayDiv.textContent = "23/02/123";
+    // badTransactionsCell.appendChild(secondDayDiv);
+    tableRow.appendChild(badTransactionsCell);
+
+    const ipAddressesCell = document.createElement("td");
+    element.errors.forEach(element => {
+        const IpAddressDiv = document.createElement("div");
+        IpAddressDiv.classList.add("row");
+        IpAddressDiv.textContent = element.ip;
+        ipAddressesCell.appendChild(IpAddressDiv);
+    });
+    // const firstIpAddressDiv = document.createElement("div");
+    // firstIpAddressDiv.classList.add("row");
+    // firstIpAddressDiv.textContent = "172.16.158";
+    // ipAddressesCell.appendChild(firstIpAddressDiv);
+    // const secondIpAddressDiv = document.createElement("div");
+    // secondIpAddressDiv.classList.add("row");
+    // secondIpAddressDiv.textContent = "172.1456";
+    // ipAddressesCell.appendChild(secondIpAddressDiv);
+    tableRow.appendChild(ipAddressesCell);
+
+    erorrsTable.appendChild(tableRow);
 }

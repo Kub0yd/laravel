@@ -126,5 +126,25 @@ class AdminService
         $permissions = $role->permissions;
         $user->permissions()->attach($permissions);
     }
+    public function sendOfferErrors($request)
+    {
+        $offer = Offer::find($request->offer_id);
+        $subs = $offer->subs()->get();
+        $badTransactions = [];
+
+        foreach ($subs as $sub) {
+            # code...
+            $errors = $sub->badTransactions()->get();
+            $badTransactions[] = [
+                'sub_id' => $sub->id,
+                'webmaster' => $sub->user()->first()->name,
+                'errors' => $errors,
+            ];
+            // DispatchService::AdminChannelSend(DispatchService::createResponse('error', $sub->user()->first()->name));
+        }
+        $response = DispatchService::createResponse('sendOfferErrors', $badTransactions);
+        DispatchService::AdminChannelSend($response);
+
+    }
 }
 
