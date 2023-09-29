@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\AdTech;
 
 use App\Http\Controllers\Controller;
-use App\Models\AdTech\Offer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\User;
+use App\Models\AdTech\Offer;
 use App\Models\AdTech\Sub;
 use App\Models\AdTech\Role;
 use App\Models\AdTech\Permission;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use App\Events\OfferStatus;
+
 use App\Services\OfferService;
 use App\Services\SubService;
 use App\Services\DispatchService;
 
-use App\Http\Controllers\AdTech\SubController;
 
 class OfferController extends Controller
 {
@@ -24,15 +24,11 @@ class OfferController extends Controller
      */
     public function index()
     {
-        //
-        // $offer = Offer::find(5);
-        // $offerSubs = $offer->subs->where('is_active', true);
-        // dd($offerSubs);
+
         if(Auth::check()){
 
             $user = Auth::user();
             $offers = Offer::where('creator_id', $user->id)->get();
-            // $all_offers = Offer::with(['user'])->whereNotIn('creator_id', [$user->id])->where('is_active', [true])->get();
             $userId = $user->id;
             $allOffers = Offer::where('creator_id', '<>', $userId)
                 ->whereDoesntHave('subs', function ($query) use ($userId) {
@@ -42,8 +38,6 @@ class OfferController extends Controller
                 ->get();
             $userSubs = $user->subs->where('is_active', true);
 
-            // $subs = Sub::where('offer_id', Offer::where('id', 1)->get())->get();
-            // dd(Auth::user()->subs()->where('offer_id', 1)->where('is_active', true)->get());
         }
         return view('adTech.main',  compact('offers', 'userSubs', 'allOffers'));
     }
@@ -61,78 +55,28 @@ class OfferController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        // switch ($request->subscription) {
-        //     case 'subscribe':
-        //         (new SubService())->subscribe($request);
-        //         break;
+        switch ($request->type) {
+            case 'subscription':
+                (new SubService())->subscribe($request);
+                return back();
+                break;
 
-        //     case 'unsubscribe':
-        //         (new SubService())->unsubscribe($request);
-        //         break;
+            case 'unsubscribe':
+                (new SubService())->unsubscribe($request);
+                return back();
+                break;
 
-        //     default:
-        //         $validated = $request->validate([
-        //             'title' => 'required',
-        //         ]);
-        //         try {
-        //             // dd($request->all());
-        //             $offer = new Offer();
-        //             $offer->title = $request->title;
-        //             $offer->URL = $request->URL;
-        //             $offer->price = $request->price;
-        //             $offer->creator_id = Auth::id();
-        //             $offer->save();
-
-        //             // OfferStatus::dispatch(array('type' => 'createOffer', 'title' => $request->title, 'URL' => $request->URL, 'price' => $request->price, 'creator' => Auth::user()->name));
-
-        //         } catch (\Exception $e) {
-        //             dd($e->getMessage());
-        //         }
-
-        //         return back();
-        //             break;
-        // }
-            // dd($request->type);
-        if ($request->type === "subscription"){
-
-            (new SubService())->subscribe($request);
-            return back();
-        }else if($request->type === 'unsubscribe'){
-            (new SubService())->unsubscribe($request);
-            return back();
-
-        }else{
-
-            $validated = $request->validate([
-                'title' => 'required',
-            ]);
-            try {
-                // dd($request->all());
-                $offer = new Offer();
-                $offer->title = $request->title;
-                $offer->URL = $request->URL;
-                $offer->price = $request->price;
-                $offer->creator_id = Auth::id();
-                $offer->save();
-
-                $data = [
-                    'offer_id' => $offer->id,
-                    'price' => $offer->price,
-                    'creator' => Auth::user()->name,
-                    'title' => $offer->title,
-                    'URL' => $offer->URL,
-                ];
-
-                DispatchService::AdminChannelSend(DispatchService::createResponse('newOffer', $data));
-                // OfferStatus::dispatch(array('type' => 'createOffer', 'title' => $request->title, 'URL' => $request->URL, 'price' => $request->price, 'creator' => Auth::user()->name));
-
-            } catch (\Exception $e) {
-                dd($e->getMessage());
-            }
-
-            return back();
+            default:
+                $validated = $request->validate([
+                    'title' => 'required',
+                    'URL' => 'required',
+                    'price' => 'required',
+                ]);
+                (new OfferService())->createOffer($request);
+                return back();
+                break;
         }
+
     }
 
     /**

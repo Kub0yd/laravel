@@ -51,13 +51,13 @@
                         </div>
                         @if (Auth::user()->subs()->where('offer_id', $sub->offer->id)->where('is_active', true)->get()->count())
                         <div class="col-sm order-12 d-flex justify-content-end offer-subscribe">
-                            <button class="btn btn-sm btn-secondary" id="offer-id-{{$sub->offer->id}}-button" type="submit">Отписаться</button>
+                            <button class="btn btn-sm btn-secondary sub-button" id="offer-id-{{$sub->offer->id}}-button" type="submit">Отписаться</button>
                             <input class='button-value' type="hidden" name="subscription" value='unsubscribe'>
                             <input type="hidden" name="offer_id" value="{{$sub->offer->id}}">
                         </div>
                         @else
                         <div class="col-sm order-12 d-flex justify-content-end">
-                            <button class="btn btn-sm btn-primary col offer-subscribe" id="offer-id-{{$sub->offer->id}}-button" type="submit">Sub</button>
+                            <button class="btn btn-sm btn-primary col offer-subscribe sub-button" id="offer-id-{{$sub->offer->id}}-button" type="submit">Sub</button>
                             <input type="hidden" name="subscription" value='subscribe'>
                             <input type="hidden" name="offer_id" value="{{$sub->offer->id}}">
                         </div>
@@ -88,7 +88,7 @@
                     </div>
 
                     <div class="modal-body">
-                        <table class="table">
+                        <table class="table table-dark table-bordered">
                             <thead>
                             <tr>
                                 <th scope="col">Период</th>

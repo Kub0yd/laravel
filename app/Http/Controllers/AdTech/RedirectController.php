@@ -5,15 +5,19 @@ namespace App\Http\Controllers\AdTech;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 use App\Models\AdTech\Offer;
 use App\Models\AdTech\Sub;
 use App\Models\AdTech\Transaction;
 use App\Models\AdTech\BadTransaction;
-use App\Events\UserEvent;
 use App\Models\User;
+
+use App\Events\UserEvent;
 use App\Events\OfferStatus;
+
 use App\Services\DispatchService;
-use Illuminate\Support\Facades\Log;
+
 
 class RedirectController extends Controller
 {
@@ -23,9 +27,7 @@ class RedirectController extends Controller
 
         $sub = Sub::where('link', url()->current())->first();
         $offer = Offer::find($sub->offer_id);
-            // OfferStatus::dispatch(['sub' => $sub, 'offer' => $offer]);
-        // dd($request->ip());
-        // dd(!!($sub->is_active));
+        
         if ($sub->is_active && $offer->is_active){
             $transaction = new Transaction();
             $transaction->offer_id = $offer->id;

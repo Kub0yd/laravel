@@ -2,12 +2,14 @@
 namespace App\Services;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\AdTech\OfferController;
-use App\Models\AdTech\Offer;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+
+use App\Models\User;
+use App\Models\AdTech\Offer;
+
 use App\Events\OfferStatus;
+
 use App\Services\DispatchService;
 
 class OfferService
@@ -23,7 +25,6 @@ class OfferService
         if (Auth::user()->id == $offer->creator_id){
             $offer->is_active = $requestData->is_active;
             $offer->save();
-            // OfferStatus::dispatch(json_encode(array('type' => 'offerStatus', 'offer_id' => $offer->id, 'is_active' => $offer->is_active)));
             OfferStatus::dispatch([
                 'type' => 'offerStatus',
                 'offer_id' => $offerId,
@@ -48,5 +49,30 @@ class OfferService
         }
 
         // OfferStatus::dispatch(json_encode(array('undec_id' => $id)));
+    }
+    public function createOffer($request)
+    {
+        try {
+            // dd($request->all());
+            $offer = new Offer();
+            $offer->title = $request->title;
+            $offer->URL = $request->URL;
+            $offer->price = $request->price;
+            $offer->creator_id = Auth::id();
+            $offer->save();
+
+            $data = [
+                'offer_id' => $offer->id,
+                'price' => $offer->price,
+                'creator' => Auth::user()->name,
+                'title' => $offer->title,
+                'URL' => $offer->URL,
+            ];
+
+            DispatchService::AdminChannelSend(DispatchService::createResponse('newOffer', $data));
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     }
 }

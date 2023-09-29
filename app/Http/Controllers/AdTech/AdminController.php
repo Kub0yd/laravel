@@ -4,15 +4,18 @@ namespace App\Http\Controllers\AdTech;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+
+use App\Models\User;
 use App\Models\AdTech\Offer;
 use App\Models\AdTech\Transaction;
 use App\Models\AdTech\Sub;
+
 use App\Events\AdminEvent;
 use App\Services\AdminService;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
+
 Use DB;
 
 
@@ -23,13 +26,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        //
-        // $sub = Sub::find(2);
-        // dd($sub->badTransactions()
-        // ->select(DB::raw('DATE(created_at) as day'), 'ip')
-        // ->orderBy('created_at', 'desc')
-        // ->get()
-        // ->groupBy('day'));
+
         $user = Auth::user();
         // dd($user->roles->all());
         if ($user->hasPermissions('administration')){
@@ -57,8 +54,7 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        // (new AdminService())->sendInfo($request);
+
         switch ($request->type) {
             case 'getOfferInfo':
                 (new AdminService())->sendOfferInfo($request);
@@ -73,14 +69,9 @@ class AdminController extends Controller
                 (new AdminService())->sendOfferErrors($request);
                 break;
             default:
-                # code...
                 break;
         }
-        // if ($request->type === "getOfferInfo"){
-        //     (new AdminService())->sendInfo($request);
-        // }else{
 
-        // }
     }
 
     /**

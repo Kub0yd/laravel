@@ -2,15 +2,16 @@
 namespace App\Services;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\AdTech\OfferController;
-use App\Http\Controllers\AdTech\SubController;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+
 use App\Models\AdTech\Offer;
 use App\Models\AdTech\Sub;
-use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+
 use App\Events\OfferStatus;
-use Illuminate\Support\Str;
+
 use App\Services\DispatchService;
 
 class SubService
@@ -49,11 +50,7 @@ class SubService
                 'offer_id' => $offer->id,
             ];
             DispatchService::UserChannelSend(Auth::id(), DispatchService::createResponse('subInfo', $userSubUpdateData));
-            // OfferStatus::dispatch([
-            //     'type' => 'subStatus',
-            //     'offer_id' => $offer->id,
-            //     'offer_url' => $offer->URL,
-            //     'offer_subs' => $offer->subs->where('is_active', true)->count()]);
+
         }
 
     }
@@ -66,7 +63,6 @@ class SubService
         if (Auth::user()->subs()->where('offer_id', $offer->id)->where('is_active', true)->get()->count())
             {
 
-                // $sub = Sub::where('offer_id', $offer->id)->where('user_id', Auth::id())->first();
                 $sub = Auth::user()->subs()->where('offer_id', $offer->id)->first();
                 $sub->is_active = false;
                 $sub->save();
@@ -81,5 +77,6 @@ class SubService
             }
 
     }
+
 }
 

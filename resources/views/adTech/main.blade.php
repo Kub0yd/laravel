@@ -15,46 +15,8 @@
         </div>
     @endif
     @if (Auth::user()->hasPermissions('can_create_offers'))
-    <!-- Modal -->
-    <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Create offer</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-                </div>
 
-                <div class="modal-body">
-                    <form method="POST" action="{{ route('main.store') }}">
-                        @csrf
-                        <div class="input-group mt-5">
-                            <span class="input-group-text">Title</span>
-                            <input type="text" name='title' class="form-control" placeholder="Title">
-                        </div>
-
-                        <div class="input-group mt-2">
-                            <span class="input-group-text">Your website page URL</span>
-                            <input type="text" name='URL' class="form-control" placeholder="https://yoursite.com/page/product">
-                        </div>
-
-                        <div class="input-group mt-2">
-                            <span class="input-group-text">Price per click</span>
-                            <input type="number" name='price' class="form-control" value='1' placeholder="">
-                        </div>
-
-
-                        <div class="input-group mt-2">
-                            <button id="button" type="submit" class="btn btn-primary">Добавить</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    @include('adTech.modals.createOffer')
 
     <h3  class="title">Ваши предложения</h3>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -121,70 +83,16 @@
             </div>
         </div>
             <!-- Modal -->
-        <div class="modal fade " id="offer-{{$offer->id}}-statistic" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Statistic</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">Период</th>
-                                <th scope="col">Расходы</th>
-                                <th scope="col">Переходы</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <th scope="row">День</th>
-                                <td class="loss-stat loss-day">{{$offer->transactions->where('created_at', '>=', now()->format('Y-m-d'))->where('created_at', '<', now()->addDay()->format('Y-m-d'))->sum('cost')}}</td>
-                                <td class="transitions-stat transitions-day">{{$offer->transactions->where('created_at', '>=', now()->format('Y-m-d'))->where('created_at', '<', now()->addDay()->format('Y-m-d'))->count()}}</td>
-
-                            </tr>
-                            <tr>
-                                <th scope="row">Месяц</th>
-                                <td class="loss-stat loss-month">{{$offer->transactions->where('created_at', '>=', now()->firstOfMonth()->format('Y-m-d'))
-                                    ->where('created_at', '<', now()->addMonth()->firstOfMonth()->format('Y-m-d'))
-                                    ->sum('cost')}}
-                                </td>
-                                <td class="transitions-stat transitions-month">{{$offer->transactions->where('created_at', '>=', now()->firstOfMonth()->format('Y-m-d'))
-                                    ->where('created_at', '<', now()->addMonth()->firstOfMonth()->format('Y-m-d'))
-                                    ->count()}}
-                                </td>
-
-                            </tr>
-                            <tr>
-                                <th scope="row">Год</th>
-                                <td class="loss-stat loss-year">{{$offer->transactions->where('created_at', '>=', now()->firstOfYear()->format('Y-m-d'))
-                                    ->where('created_at', '<', now()->addYear()->firstOfYear()->format('Y-m-d'))
-                                    ->sum('cost')}}
-                                </td>
-                                <td class="transitions-stat transitions-year">{{$offer->transactions->where('created_at', '>=', now()->firstOfYear()->format('Y-m-d'))
-                                    ->where('created_at', '<', now()->addYear()->firstOfYear()->format('Y-m-d'))
-                                    ->count()}}
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('adTech.modals.usersOfferStat')
+        
         @endforeach
     </div>
     @endif
     <h3  class="title">Подписки</h3>
-@if (Auth::user()->hasPermissions('sub_offers'))
-    @include('adTech.sublist')
-    @include('adTech.availableOffers')
-@endif
+    @if (Auth::user()->hasPermissions('sub_offers'))
+        @include('adTech.sublist')
+        @include('adTech.availableOffers')
+    @endif
 </div>
 @endsection
 @section('scripts')

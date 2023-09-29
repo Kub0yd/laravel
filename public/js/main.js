@@ -1,3 +1,4 @@
+const parent = document.body;
 let offerStatusCheckBox = document.querySelectorAll('#flexSwitchCheckDefault');
 let offerCardsPanel = document.querySelector('.offer-cards-panel');
 const offersPanel = document.querySelector('.offers-list');
@@ -45,22 +46,19 @@ offerStatusCheckBox.forEach(item => {
 
         })
 })
+parent.addEventListener('click', (event) =>{
 
-subscribeButton.forEach(item => {
-
-    item.addEventListener('click', function(e) {
-        e.preventDefault();
-
-        let offerIdDiv = item.closest('.container').querySelector('.offer-id');
-        let buttonValue =  item.closest('.container').querySelector("input[name='subscription']");
+    if (event.target.classList.contains('sub-button')){
+        let offerIdDiv = event.target.closest('.container').querySelector('.offer-id');
+        let buttonValue =  event.target.closest('.container').querySelector("input[name='subscription']");
         let subsPanel = document.querySelector('.subs-list');
-        let offerDiv = item.closest('.offer-cards-panel');
-        let subButton = item.querySelector('.btn');
+        let offerDiv = event.target.closest('.offer-cards-panel');
+        let subButton = event.target;
 
         let offerId = offerIdDiv.textContent.trim().substring(1);
+
         request = '';
         if (buttonValue.value === 'unsubscribe'){
-
             // subButton = item.querySelector('.btn');
             buttonValue.value = 'subscribe';
             subButton.classList.remove('btn-secondary');
@@ -68,7 +66,10 @@ subscribeButton.forEach(item => {
             subButton.textContent = 'Sub';
             offersPanel.append(offerDiv);
             personalUrl = offerDiv.querySelector('.user-url');
-            personalUrl.remove();
+            if (personalUrl){
+                personalUrl.remove();
+            }
+
             request = 'unsubscribe';
 
         }else if(buttonValue.value === 'subscribe'){
@@ -87,8 +88,54 @@ subscribeButton.forEach(item => {
             type: request,
             offer_id: offerId,
         })
-    })
+    }
+        // console.log(offerIdDiv);
+
 })
+
+// subscribeButton.forEach(item => {
+
+//     item.addEventListener('click', function(e) {
+//         e.preventDefault();
+//         let offerIdDiv = item.closest('.container').querySelector('.offer-id');
+//         let buttonValue =  item.closest('.container').querySelector("input[name='subscription']");
+//         let subsPanel = document.querySelector('.subs-list');
+//         let offerDiv = item.closest('.offer-cards-panel');
+//         let subButton = item.querySelector('.btn');
+
+//         let offerId = offerIdDiv.textContent.trim().substring(1);
+
+//         request = '';
+//         if (buttonValue.value === 'unsubscribe'){
+
+//             // subButton = item.querySelector('.btn');
+//             buttonValue.value = 'subscribe';
+//             subButton.classList.remove('btn-secondary');
+//             subButton.classList.add('btn-primary');
+//             subButton.textContent = 'Sub';
+//             offersPanel.append(offerDiv);
+//             personalUrl = offerDiv.querySelector('.user-url');
+//             personalUrl.remove();
+//             request = 'unsubscribe';
+
+//         }else if(buttonValue.value === 'subscribe'){
+
+//             subsPanel.append(offerDiv);
+//             buttonValue.value = 'unsubscribe';
+//             subButton.classList.remove('btn-primary');
+//             subButton.classList.add('btn-secondary');
+//             subButton.textContent = 'Unsub';
+
+//             request = 'subscription';
+//         }
+//         axios.post('main', {
+//             // data: {offer_id: 2},
+//             _method: 'post',
+//             type: request,
+//             offer_id: offerId,
+//         })
+//     })
+// })
 
 function incomeVal(response){
 
@@ -227,16 +274,6 @@ function createCard (response){
     let div = document.createElement("div");
 div.className = "row offer-cards-panel";
 
-// let form = document.createElement("form");
-// form.method = "POST";
-// form.action = "http://localhost/main";
-
-// let input = document.createElement("input");
-// input.type = "hidden";
-// input.name = "_token";
-// input.value = "";
-// form.appendChild(input);
-
 let container = document.createElement("div");
 container.className = "container rounded-pill border border-2 border-secondary bg-dark bg-gradient text-white offer-card-id-" + response.offer_id;
 
@@ -270,7 +307,7 @@ col2_1.appendChild(svg);
 let col2_2 = document.createElement("div");
 col2_2.id = "offer-id-" + response.offer_id;
 col2_2.textContent = "#" + response.offer_id;
-col2_2.className = "col";
+col2_2.className = "col offer-id";
 
 row2.appendChild(col2_1);
 row2.appendChild(col2_2);
@@ -304,7 +341,18 @@ let col7 = document.createElement("div");
 col7.className = "col-lg order-12 d-flex justify-content-end";
 
 let row3 = document.createElement("div");
-row3.className = "row align-items-center offer-4-subs";
+row3.className = "row align-items-center offer-"+response.offer_id+"-subs-row";
+
+let statButtonCol = document.createElement("div");
+statButtonCol.className = "col-auto offer-statistic-button";
+let statButton = document.createElement("button");
+statButton.type = "button";
+statButton.className = "btn  btn-sm btn-primary";
+statButton.dataset.bsToggle = "modal";
+statButton.dataset.bsTarget = "#offer-" + response.offer_id +"-statistic";
+statButton.textContent = 'Statistic';
+statButtonCol.appendChild(statButton);
+row3.appendChild(statButtonCol);
 
 let col8 = document.createElement("div");
 col8.className = "col-auto";
@@ -322,10 +370,10 @@ col9.appendChild(span3);
 row3.appendChild(col9);
 
 let col10 = document.createElement("div");
-col10.className = "col-sm order-12 d-flex justify-content-end";
+col10.className = "col-sm order-12 d-flex justify-content-end offer-subscribe";
 let button = document.createElement("button");
-button.className = "btn btn-primary col";
-button.id = "offer-id-4-button";
+button.className = "btn btn-primary btn-sm col sub-button";
+button.id = "offer-id-"+response.offer_id + "-button";
 button.type = "submit";
 button.textContent = "Sub";
 let input1 = document.createElement("input");
@@ -335,7 +383,7 @@ input1.value = "subscribe";
 let input2 = document.createElement("input");
 input2.type = "hidden";
 input2.name = "offer_id";
-input2.value = "4";
+input2.value = response.offer_id;
 
 col10.appendChild(button);
 col10.appendChild(input1);
