@@ -27,7 +27,7 @@ class RedirectController extends Controller
 
         $sub = Sub::where('link', url()->current())->first();
         $offer = Offer::find($sub->offer_id);
-        
+
         if ($sub->is_active && $offer->is_active){
             $transaction = new Transaction();
             $transaction->offer_id = $offer->id;
@@ -59,7 +59,7 @@ class RedirectController extends Controller
 
             Log::build([
                 'driver' => 'single',
-                'path' => storage_path('logs/test.log'),
+                'path' => storage_path('logs/transactions.log'),
               ])->info('Transaction offer_id:'.$offer->id.", from webmaster:".$sub->user->name);
 
             return redirect($offer->URL);

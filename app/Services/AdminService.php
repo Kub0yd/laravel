@@ -1,19 +1,13 @@
 <?php
 namespace App\Services;
 
-use App\Http\Controllers\Controller;
+
 use App\Models\AdTech\Offer;
-use App\Models\AdTech\Sub;
 use App\Models\AdTech\Role;
-use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use App\Events\AdminEvent;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
+
 use App\Services\DispatchService;
-use App\Services\UserService;
+
 
 class AdminService
 {
@@ -36,13 +30,7 @@ class AdminService
             ];
         }
 
-        $test  = [
-            'type' => 'sendOfferInfo',
-            'offer' => $offerUserInfo,
-        ];
-
-        $response = DispatchService::createResponse('sendOfferInfo', $offerUserInfo);
-        DispatchService::AdminChannelSend($response);
+        DispatchService::AdminChannelSend(DispatchService::createResponse('sendOfferInfo', $offerUserInfo));
 
         // event(new AdminEvent(array('type' => 'error',)));
 
