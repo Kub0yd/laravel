@@ -33,7 +33,13 @@ class AdminController extends Controller
             $offers = Offer::all();
             $allUsers = User::orderBy('id')->cursorPaginate(10);
             $transactions = Transaction::all();
-            return view('adTech.adminPanel',  compact('offers', 'allUsers', 'transactions'));
+            $allIncome = $user->transactions->sum('cost') * 0.8;
+            $allLoss = Transaction::join('offers', 'transactions.offer_id', '=', 'offers.id')
+            ->where('offers.creator_id', $user->id)
+            ->orderBy('transactions.id', 'desc')
+            ->sum('cost');
+            $balance = $allIncome - $allLoss;
+            return view('adTech.adminPanel',  compact('offers', 'allUsers', 'transactions', 'balance'));
 
 
         }else{

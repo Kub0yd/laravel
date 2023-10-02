@@ -1,15 +1,9 @@
 const parent = document.body;
-let offerStatusCheckBox = document.querySelectorAll('#flexSwitchCheckDefault');
-let offerCardsPanel = document.querySelector('.offer-cards-panel');
+const offerStatusCheckBox = document.querySelectorAll('#flexSwitchCheckDefault');
+const offerCardsPanel = document.querySelector('.offer-cards-panel');
 const offersPanel = document.querySelector('.offers-list');
 const subscribeButton =  document.querySelectorAll('.offer-subscribe');
-
-// var app = {{ Illuminate\Support\Js::from($array) }};
-// const userChannel = Echo.private('user.'.userId);
-
-// userChannel.listen('OrderShipmentStatusUpdated', (e) => {
-//     console.log(e);
-// });
+const balance = document.querySelector('.balance');
 
 
 offerStatusCheckBox.forEach(item => {
@@ -63,7 +57,7 @@ parent.addEventListener('click', (event) =>{
             buttonValue.value = 'subscribe';
             subButton.classList.remove('btn-secondary');
             subButton.classList.add('btn-primary');
-            subButton.textContent = 'Sub';
+            subButton.textContent = 'подписаться';
             offersPanel.append(offerDiv);
             personalUrl = offerDiv.querySelector('.user-url');
             if (personalUrl){
@@ -78,97 +72,61 @@ parent.addEventListener('click', (event) =>{
             buttonValue.value = 'unsubscribe';
             subButton.classList.remove('btn-primary');
             subButton.classList.add('btn-secondary');
-            subButton.textContent = 'Unsub';
+            subButton.textContent = 'Отписаться';
 
             request = 'subscription';
         }
         axios.post('main', {
-            // data: {offer_id: 2},
             _method: 'post',
             type: request,
             offer_id: offerId,
         })
     }
-        // console.log(offerIdDiv);
 
 })
 
-// subscribeButton.forEach(item => {
-
-//     item.addEventListener('click', function(e) {
-//         e.preventDefault();
-//         let offerIdDiv = item.closest('.container').querySelector('.offer-id');
-//         let buttonValue =  item.closest('.container').querySelector("input[name='subscription']");
-//         let subsPanel = document.querySelector('.subs-list');
-//         let offerDiv = item.closest('.offer-cards-panel');
-//         let subButton = item.querySelector('.btn');
-
-//         let offerId = offerIdDiv.textContent.trim().substring(1);
-
-//         request = '';
-//         if (buttonValue.value === 'unsubscribe'){
-
-//             // subButton = item.querySelector('.btn');
-//             buttonValue.value = 'subscribe';
-//             subButton.classList.remove('btn-secondary');
-//             subButton.classList.add('btn-primary');
-//             subButton.textContent = 'Sub';
-//             offersPanel.append(offerDiv);
-//             personalUrl = offerDiv.querySelector('.user-url');
-//             personalUrl.remove();
-//             request = 'unsubscribe';
-
-//         }else if(buttonValue.value === 'subscribe'){
-
-//             subsPanel.append(offerDiv);
-//             buttonValue.value = 'unsubscribe';
-//             subButton.classList.remove('btn-primary');
-//             subButton.classList.add('btn-secondary');
-//             subButton.textContent = 'Unsub';
-
-//             request = 'subscription';
-//         }
-//         axios.post('main', {
-//             // data: {offer_id: 2},
-//             _method: 'post',
-//             type: request,
-//             offer_id: offerId,
-//         })
-//     })
-// })
 
 function incomeVal(response){
 
     const offerSubsCount = document.querySelector('.offer-card-id-' + response.offer_id);
     const offerIncome = offerSubsCount.querySelector('#offer-income');
-    // console.log(response);
+
     income = offerIncome.textContent.replace(/[^0-9,.]/g,"");
     let newIncome = parseFloat(income) + response.income;
     offerIncome.textContent = "Доход: " +(Number(newIncome.toFixed(2)).toString(10)) + "₽";
 
+    let balanceArray = balance.textContent.split(": ");
+    let newBalanceLoss =  parseFloat(balanceArray[1]) + parseFloat(response.income);
+    balance.textContent = "Баланс: " +(Number(newBalanceLoss.toFixed(2)).toString(10)) + "₽";
     //Statisctic modal
     const offerStat = document.querySelector('#offer-' + response.offer_id + '-statistic');
+    if (offerStat){
+        const offerStatIncome = offerStat.querySelectorAll('.income-stat');
+        const offerStatrans = offerStat.querySelectorAll('.transitions-stat');
 
-    const offerStatIncome = offerStat.querySelectorAll('.income-stat');
-    const offerStatrans = offerStat.querySelectorAll('.transitions-stat');
+        offerStatIncome.forEach(item => {
+            offerStatNewIncome = parseFloat(item.textContent) + parseFloat(response.income);
+            item.textContent = Number(offerStatNewIncome.toFixed(2)).toString(10);
+        })
+        offerStatrans.forEach(item => {
+            item.textContent = parseInt(item.textContent) + 1;
+        })
+    }
+    }
 
-    offerStatIncome.forEach(item => {
-        offerStatNewIncome = parseFloat(item.textContent) + parseFloat(response.income);
-        item.textContent = Number(offerStatNewIncome.toFixed(2)).toString(10);
-    })
-    offerStatrans.forEach(item => {
-        item.textContent = parseInt(item.textContent) + 1;
-    })
-}
 function lossVal(response){
     const offerSubsCount = document.querySelector('.offer-card-id-' + response.offer_id);
     const offerLoss = offerSubsCount.querySelector('#offer-loss');
-    // console.log(response);
+
     loss = offerLoss.textContent.replace(/[^0-9,.]/g,"");
     let newLoss = parseFloat(loss) + parseFloat(response.loss);
-    // console.log( newLoss);
+
     offerLoss.textContent = "Расход: " +(Number(newLoss.toFixed(2)).toString(10)) + "₽";
-    //Statisctic modal
+
+    let balanceArray = balance.textContent.split(": ");
+    let newBalanceLoss =  parseFloat(balanceArray[1]) - parseFloat(response.loss);
+    balance.textContent = "Баланс: " +(Number(newBalanceLoss.toFixed(2)).toString(10)) + "₽";
+
     const offerStat = document.querySelector('#offer-' + response.offer_id + '-statistic');
 
     const offerStatLoss = offerStat.querySelectorAll('.loss-stat');
@@ -192,7 +150,7 @@ function offerStatusEvent(event){
     let offerCard = document.querySelector('.offer-card-id-'+event.offer_id);
 
     if (offerCard && offerCard.closest('.offers-list') && !event.is_active){
-        // console.log(offerCard);
+
         offerCard.remove();
     }else if(!offerCard){
         createCard (event);
@@ -201,11 +159,11 @@ function offerStatusEvent(event){
 
 
 function updateSubs(response){
-    // console.log(response);
+
     let offerSubsCount = document.querySelector('.offer-' + response.offer_id + '-subs');
 
     if (offerSubsCount){
-        // console.log(response);
+
         offerSubsCount.textContent = "Subs: " + response.offer_subs;
     }
 }
@@ -217,15 +175,18 @@ function updateSubStatus(response){
 
 function disactivateSub(response){
     let offerCard = document.querySelector('.offer-card-id-'+response.offer_id);
-    let indicator = offerCard.querySelector('svg');
-    let urlField = offerCard.querySelector('.user-url')
-    indicator.classList.remove('active-indicator');
-    indicator.classList.add('disabled-indicator');
-    indicator.style.fill = 'red'
-    urlField.remove();
+    if (offerCard){
+        let indicator = offerCard.querySelector('svg');
+        let urlField = offerCard.querySelector('.user-url')
+        indicator.classList.remove('active-indicator');
+        indicator.classList.add('disabled-indicator');
+        indicator.style.fill = 'red'
+        urlField.remove();
+    }
+
 }
 function activateSub(response){
-    console.log(response.offer_id);
+
     let offerCard = document.querySelector('.offer-card-id-'+response.offer_id);
     let indicator = offerCard.querySelector('svg');
 
@@ -237,7 +198,7 @@ function activateSub(response){
 }
 
 function addSubInfo(response){
-    // console.log(response);
+
     createUserSubURL(response.offer_id, response.sub_url);
 
 }
@@ -350,7 +311,7 @@ statButton.type = "button";
 statButton.className = "btn  btn-sm btn-primary";
 statButton.dataset.bsToggle = "modal";
 statButton.dataset.bsTarget = "#offer-" + response.offer_id +"-statistic";
-statButton.textContent = 'Statistic';
+statButton.textContent = 'Статистика';
 statButtonCol.appendChild(statButton);
 row3.appendChild(statButtonCol);
 
@@ -375,7 +336,7 @@ let button = document.createElement("button");
 button.className = "btn btn-primary btn-sm col sub-button";
 button.id = "offer-id-"+response.offer_id + "-button";
 button.type = "submit";
-button.textContent = "Sub";
+button.textContent = "подписаться";
 let input1 = document.createElement("input");
 input1.type = "hidden";
 input1.name = "subscription";
@@ -402,6 +363,8 @@ row1.appendChild(col7);
 container.appendChild(row1);
 // form.appendChild(container);
 div.appendChild(container);
+if (offersPanel){
+    offersPanel.appendChild(div);
+}
 
-offersPanel.appendChild(div);
 }

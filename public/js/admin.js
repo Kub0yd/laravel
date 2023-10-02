@@ -1,3 +1,4 @@
+const parent = document.body;
 const myModalEl = document.querySelector('.modal')
 const offerModalButton = document.querySelectorAll('.modal-act')
 const userModalButton = document.querySelectorAll('.user-modal-act')
@@ -9,7 +10,7 @@ const panelUserId = document.querySelector('.stat-user-id');
 //кнопка ошибки переходов
 const getErrorsButton = document.querySelectorAll('.errors');
 const erorrsTable = document.querySelector('.offer-errors');
-
+const usersList = document.querySelector('.users');
 
 
 offerModalButton.forEach(item => {
@@ -22,7 +23,7 @@ offerModalButton.forEach(item => {
             offerTable = item.parentNode.parentNode.previousElementSibling;
             offerId = offerTable.querySelector('.offer-id').textContent.substring(1);
             axios.post('admin', {
-                // data: {offer_id: 2},
+
                 type: 'getOfferInfo',
                 _method: 'post',
                 offer_id: offerId,
@@ -31,30 +32,22 @@ offerModalButton.forEach(item => {
 
     })
 })
-userModalButton.forEach(item => {
-    item.addEventListener('click', () =>{
+parent.addEventListener('click', (e)=>{
+    if (e.target.classList.contains('user-modal-act')){
+        userDiv = e.target.closest('.row');
+        userName = userDiv.querySelector('.user-name').textContent;
 
+        if (saveButton.classList.contains('btn-primary')){
+            saveButton.classList.remove('btn-primary');
+            saveButton.classList.add('btn-secondary');
+        }
+        axios.post('admin', {
 
-
-            // let modalBody = document.querySelector('.modal-body');
-            // modalBody.textContent = '13123123';
-            userDiv = item.closest('.row');
-            userName = userDiv.querySelector('.user-name').textContent;
-
-            if (saveButton.classList.contains('btn-primary')){
-                saveButton.classList.remove('btn-primary');
-                saveButton.classList.add('btn-secondary');
-            }
-
-            axios.post('admin', {
-                // data: {offer_id: 2},
-                type: 'getUserInfo',
-                _method: 'post',
-                user_name: userName.trim(),
-            })
-
-
-    })
+            type: 'getUserInfo',
+            _method: 'post',
+            user_name: userName.trim(),
+        })
+    }
 })
 
 function test(){
@@ -91,7 +84,7 @@ function generateOfferTable(response){
 
 function createOfferInfo(response){
 
-    var tbody = document.querySelector('.offer-user-info');
+    const tbody = document.querySelector('.offer-user-info');
     tbody.innerHTML = '';
     let offers = response.data;
 
@@ -302,13 +295,13 @@ checkInput.forEach((checkBox) => {
 })
 
 function generateSubsTable(offer){
-    var tr = document.createElement('tr');
+    const tr = document.createElement('tr');
     tr.classList.add('offer-user-info');
 
-    var th = document.createElement('th');
+    const th = document.createElement('th');
     th.setAttribute('scope', 'row');
 
-    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     if (offer.is_active){
         svg.classList.add('offer-indicator', 'active-indicator');
         svg.setAttribute('fill', 'green');
@@ -321,7 +314,7 @@ function generateSubsTable(offer){
 
     svg.setAttribute('viewBox', '0 0 16 20');
 
-    var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circle.setAttribute('cx', '8');
     circle.setAttribute('cy', '8');
     circle.setAttribute('r', '8');
@@ -329,32 +322,32 @@ function generateSubsTable(offer){
     svg.appendChild(circle);
     th.appendChild(svg);
 
-    var td1 = document.createElement('td');
-    var span1 = document.createElement('span');
+    const td1 = document.createElement('td');
+    const span1 = document.createElement('span');
     span1.classList.add('offer-id');
     span1.textContent = offer.user_id;
     td1.appendChild(span1);
 
-    var td2 = document.createElement('td');
-    var span2 = document.createElement('span');
+    const td2 = document.createElement('td');
+    const span2 = document.createElement('span');
     span2.classList.add('creator');
     span2.textContent = offer.user_name;
     td2.appendChild(span2);
 
-    var td3 = document.createElement('td');
-    var a = document.createElement('a');
+    const td3 = document.createElement('td');
+    const a = document.createElement('a');
     a.classList.add('personal-url');
     a.href = offer.user_personalURL;
     a.textContent = offer.user_personalURL;
     td3.appendChild(a);
 
-    var td4 = document.createElement('td');
-    var span4 = document.createElement('span');
+    const td4 = document.createElement('td');
+    const span4 = document.createElement('span');
     span4.textContent = offer.user_income + '₽';
     td4.appendChild(span4);
 
-    var td5 = document.createElement('td');
-    var span5 = document.createElement('span');
+    const td5 = document.createElement('td');
+    const span5 = document.createElement('span');
     span5.textContent = '';
     offer.user_roles.forEach(role => {
         span5.textContent = span5.textContent + role.name + " ";
@@ -363,15 +356,6 @@ function generateSubsTable(offer){
 
     td5.appendChild(span5);
 
-    td6 = document.createElement('td');
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.classList.add('btn', 'btn-sm', 'btn-danger', 'errors');
-    button.dataset.bsToggle = 'modal';
-    button.dataset.bsTarget = '#attempts-error';
-    button.textContent = 'ошибки переходов';
-
-    td6.appendChild(button);
 
 
     // Добавляем элементы в родительский элемент
@@ -381,10 +365,10 @@ function generateSubsTable(offer){
     tr.appendChild(td3);
     tr.appendChild(td4);
     tr.appendChild(td5);
-    tr.appendChild(td6);
+
 
     // Находим родительский элемент и добавляем созданный элемент в него
-    var tbody = document.querySelector('.offer-user-info');
+    const tbody = document.querySelector('.offer-user-info');
     tbody.appendChild(tr);
 }
 
@@ -622,14 +606,7 @@ function generateErrorsTable(element){
         DayDiv.textContent = date.toLocaleString();
         badTransactionsCell.appendChild(DayDiv);
     });
-    // const firstDayDiv = document.createElement("div");
-    // firstDayDiv.classList.add("row");
-    // firstDayDiv.textContent = "23/02/123";
-    // badTransactionsCell.appendChild(firstDayDiv);
-    // const secondDayDiv = document.createElement("div");
-    // secondDayDiv.classList.add("row");
-    // secondDayDiv.textContent = "23/02/123";
-    // badTransactionsCell.appendChild(secondDayDiv);
+
     tableRow.appendChild(badTransactionsCell);
 
     const ipAddressesCell = document.createElement("td");
@@ -639,15 +616,43 @@ function generateErrorsTable(element){
         IpAddressDiv.textContent = element.ip;
         ipAddressesCell.appendChild(IpAddressDiv);
     });
-    // const firstIpAddressDiv = document.createElement("div");
-    // firstIpAddressDiv.classList.add("row");
-    // firstIpAddressDiv.textContent = "172.16.158";
-    // ipAddressesCell.appendChild(firstIpAddressDiv);
-    // const secondIpAddressDiv = document.createElement("div");
-    // secondIpAddressDiv.classList.add("row");
-    // secondIpAddressDiv.textContent = "172.1456";
-    // ipAddressesCell.appendChild(secondIpAddressDiv);
+
     tableRow.appendChild(ipAddressesCell);
 
     erorrsTable.appendChild(tableRow);
+}
+function addUserPanel(response){
+
+    const row = document.createElement("div");
+    row.classList.add("row");
+
+    const col1 = document.createElement("div");
+    col1.classList.add("col");
+    const userId = document.createElement("span");
+    userId.classList.add("user-id");
+    userId.innerHTML = response.user_id;
+    col1.appendChild(userId);
+
+    const col2 = document.createElement("div");
+    col2.classList.add("col", "user-name");
+    const userName = document.createElement("p");
+    userName.innerHTML = response.user_name;
+    col2.appendChild(userName);
+
+    const col3 = document.createElement("div");
+    col3.classList.add("col");
+    const button = document.createElement("button");
+    button.setAttribute("type", "button");
+    button.classList.add("btn", "btn-sm", "btn-primary", "user-modal-act");
+    button.setAttribute("data-bs-toggle", "modal");
+    button.setAttribute("data-bs-target", "#user-control");
+    button.innerHTML = "Управление";
+    col3.appendChild(button);
+
+    row.appendChild(col1);
+    row.appendChild(col2);
+    row.appendChild(col3);
+    usersList.appendChild(row);
+    const hr =  document.createElement("hr");
+    usersList.appendChild(hr);
 }

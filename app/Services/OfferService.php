@@ -20,19 +20,19 @@ class OfferService
         $offerId = $requestData->offer_id;
         $offer = Offer::find($offerId);
         $offerSubs = $offer->subs->where('is_active', true);
-        // DispatchService::OfferStatusChannelSend([$offerSubs]);
-
+        //авторизованный пользователь  - создатель оффера
         if (Auth::user()->id == $offer->creator_id){
             $offer->is_active = $requestData->is_active;
             $offer->save();
-            OfferStatus::dispatch([
-                'type' => 'offerStatus',
+            $offerStatus = [
                 'offer_id' => $offerId,
                 'is_active' => $offer->is_active,
                 'price' => $offer->price,
                 'creator' => Auth::user()->name,
                 'title' => $offer->title,
-                'URL' => $offer->URL]);
+                'URL' => $offer->URL
+            ];
+            DispatchService::OfferStatusChannelSend( DispatchService::createResponse('offerStatus', $offerStatus));
             foreach ($offerSubs as $sub)
             {
                 $data = [

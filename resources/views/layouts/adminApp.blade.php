@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
 
         <!-- Scripts -->
-        @vite(['resources/js/admin.js', 'resources/css/test.css'])
+        @vite(['resources/js/adminApp.js', 'resources/css/test.css'])
     </head>
     <body class="font-sans antialiased" style="background-image: url({{asset('pics/fabio.jpg')}})">
 

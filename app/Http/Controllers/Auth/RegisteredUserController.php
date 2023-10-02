@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use App\Services\UserService;
+use App\Services\DispatchService;
 
 class RegisteredUserController extends Controller
 {
@@ -44,8 +45,13 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-        
+
         (new UserService())->newUserRole($user);
+        $data = [
+            'user_id' => $user->id,
+            'user_name' => $user->name,
+        ];
+        DispatchService::AdminChannelSend(DispatchService::createResponse('newUser', $data));
 
         Auth::login($user);
 

@@ -20,7 +20,7 @@
 
     <h3  class="title">Ваши предложения</h3>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-        New offer
+        Создать оффер
     </button>
 
     <div class="row">
@@ -57,8 +57,8 @@
                 <div class="col-lg order-12 d-flex justify-content-end">
                     <div class="row align-items-center offer-{{$offer->id}}-subs-row">
                         <div class="col-auto offer-statistic-button">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#offer-{{$offer->id}}-statistic">
-                                Statis
+                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#offer-{{$offer->id}}-statistic">
+                                Статистика
                                 </button>
                         </div>
                         <div class="col-auto offer-{{$offer->id}}-subs">
@@ -84,7 +84,7 @@
         </div>
             <!-- Modal -->
         @include('adTech.modals.usersOfferStat')
-        
+
         @endforeach
     </div>
     @endif

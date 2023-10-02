@@ -39,5 +39,8 @@
           </li>
         </ul>
       </div>
+      <div class="d-flex" style="color:white">
+        <span class="balance">Баланс: {{$balance}}₽</span>
+      </div>
     </div>
   </nav>

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Adtech\Role;
+use App\Models\AdTech\Role;
 use App\Services\DispatchService;
 
 class UserService

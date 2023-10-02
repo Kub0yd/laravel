@@ -9,6 +9,8 @@ use DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
+
+
 class AdminSeeder extends Seeder
 {
     /**
@@ -22,12 +24,6 @@ class AdminSeeder extends Seeder
             'email' => 'admin@test.ru',
             'password' => Hash::make('12341234'),
         ]);
-
-        // $adminUser = User::where('name', 'admin')->first();
-        // $role = Role::where('name', 'admin')->first();
-        // $adminUser->roles()->attach($role);
-        // $permissions = $role->permissions;
-        // $adminUser->permissions()->attach($permissions);
 
     }
 }

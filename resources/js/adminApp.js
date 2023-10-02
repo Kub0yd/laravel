@@ -67,6 +67,9 @@ adminChannel.subscribed( () => {
         case 'sendOfferErrors':
             createErrorsTable(response.data);
             break;
+        case 'newUser':
+            addUserPanel(response.data);
+            break;
     }
 
 });

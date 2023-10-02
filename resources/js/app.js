@@ -18,7 +18,7 @@ channel.subscribed( () => {
     console.log(response);
     switch (response.type) {
         case 'offerStatus':
-            offerStatusEvent(response);
+            offerStatusEvent(response.data);
             break;
 
         case 'error':

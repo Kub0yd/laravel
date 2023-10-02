@@ -86,7 +86,7 @@
             </table>
         </div>
         <div class="col users-list" style="color: white">
-            <div class="overflow-auto">
+            <div class="overflow-auto users">
                 @foreach ($allUsers as $user)
                 <div class="row">
                     <div class="col">

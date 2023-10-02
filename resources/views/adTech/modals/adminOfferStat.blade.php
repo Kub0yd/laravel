@@ -18,7 +18,6 @@
                                     <th scope="col">Webmaster URL</th>
                                     <th scope="col">All time income value</th>
                                     <th scope="col">Roles</th>
-                                    <th scope="col">Transaction errors</th>
                                 </tr>
                             </thead>
                             <tbody class='offer-user-info'>
@@ -42,11 +41,6 @@
                                     </td>
                                     <td>
                                         <span>Webmaster, Admin, Creator</span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-primary modal-act errors" data-bs-toggle="modal" data-bs-target="#attempts-error">
-                                            ошибки переходов
-                                         </button>
                                     </td>
                                 </tr>
                             </tbody>

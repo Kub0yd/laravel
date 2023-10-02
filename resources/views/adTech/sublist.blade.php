@@ -40,7 +40,7 @@
                     <div class="row align-items-center offer-{{$sub->offer->id}}-subs-row">
                         <div class="col-auto offer-statistic-button">
                             <button type="button" class="btn  btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#offer-{{$sub->offer->id}}-statistic">
-                                Statis
+                                Статистика
                              </button>
                         </div>
                         <div class="col-auto offer-{{$sub->offer->id}}-subs">
@@ -83,7 +83,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Statistic</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">Статистика</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                     </div>
 

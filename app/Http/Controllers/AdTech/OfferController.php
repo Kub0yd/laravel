@@ -11,6 +11,7 @@ use App\Models\AdTech\Offer;
 use App\Models\AdTech\Sub;
 use App\Models\AdTech\Role;
 use App\Models\AdTech\Permission;
+use App\Models\AdTech\Transaction;
 
 use App\Services\OfferService;
 use App\Services\SubService;
@@ -37,9 +38,15 @@ class OfferController extends Controller
                 ->where('is_active', true)
                 ->get();
             $userSubs = $user->subs->where('is_active', true);
+            $allIncome = $user->transactions->sum('cost') * 0.8;
+            $allLoss = Transaction::join('offers', 'transactions.offer_id', '=', 'offers.id')
+            ->where('offers.creator_id', $user->id)
+            ->orderBy('transactions.id', 'desc')
+            ->sum('cost');
+            $balance = $allIncome - $allLoss;
 
         }
-        return view('adTech.main',  compact('offers', 'userSubs', 'allOffers'));
+        return view('adTech.main',  compact('offers', 'userSubs', 'allOffers', 'allIncome', 'allLoss', 'balance'));
     }
 
     /**
