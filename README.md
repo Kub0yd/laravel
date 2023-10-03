@@ -25,7 +25,7 @@
 Запустите менеджер пакетов:
 
         npm run dev
-        
+
 Перейдите на адрес, указанный в строке APP_URL вашего [.env](.env) файла 
 
 ## Описание классов
@@ -35,7 +35,7 @@
 [App/Models/AdTech](./app/Models/AdTech/)
 ## JS
 [main.js](./public/js/main.js) - для основной страницы  
-[admin.js](./public/js/admin.js) - панель администратора
+[admin.js](./public/js/admin.js) - панель администратора  
 Подключенные каналы:
 [app.js](./resources/js/app.js)  
 [adminApp.js](./resources/js/adminApp.js)  
