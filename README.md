@@ -36,7 +36,7 @@
 ## JS
 [main.js](./public/js/main.js) - для основной страницы  
 [admin.js](./public/js/admin.js) - панель администратора  
-Подключенные каналы:
+Подключенные каналы:  
 [app.js](./resources/js/app.js)  
 [adminApp.js](./resources/js/adminApp.js)  
 
