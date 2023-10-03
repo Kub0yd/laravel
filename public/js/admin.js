@@ -1,5 +1,4 @@
 const parent = document.body;
-const myModalEl = document.querySelector('.modal')
 const offerModalButton = document.querySelectorAll('.modal-act')
 const userModalButton = document.querySelectorAll('.user-modal-act')
 const checkInput = document.querySelectorAll('.form-check-input')
@@ -12,14 +11,10 @@ const getErrorsButton = document.querySelectorAll('.errors');
 const erorrsTable = document.querySelector('.offer-errors');
 const usersList = document.querySelector('.users');
 
-
+//Получаем статистику по офферу, из сервиса AdminService sendofferInfo()
 offerModalButton.forEach(item => {
     item.addEventListener('click', () =>{
 
-
-
-            // let modalBody = document.querySelector('.modal-body');
-            // modalBody.textContent = '13123123';
             offerTable = item.parentNode.parentNode.previousElementSibling;
             offerId = offerTable.querySelector('.offer-id').textContent.substring(1);
             axios.post('admin', {
@@ -32,6 +27,7 @@ offerModalButton.forEach(item => {
 
     })
 })
+//Получаем информацию по пользователю, из сервиса AdminService sendUserInfo()
 parent.addEventListener('click', (e)=>{
     if (e.target.classList.contains('user-modal-act')){
         userDiv = e.target.closest('.row');
@@ -49,11 +45,7 @@ parent.addEventListener('click', (e)=>{
         })
     }
 })
-
-function test(){
-    console.log('admin even 2');
-}
-
+//Идикатор активности оффера
 function offerStatusEvent(event){
 
     let offerTable = document.querySelectorAll('.offer-id-'+event.offer_id);
@@ -75,13 +67,14 @@ function offerStatusEvent(event){
         })
     }
 }
+//Добавляем новый оффер в таблицу при его появлении
 function generateOfferTable(response){
     let mainPageOffers = document.querySelector('.offers-table');
     createOfferTable(mainPageOffers, response);
     mainPageOffers.appendChild(generateControlLine());
     createUserOffersTable(response)
 }
-
+//При отерытии модального окна, заполняем данные по офферу
 function createOfferInfo(response){
 
     const tbody = document.querySelector('.offer-user-info');
@@ -90,10 +83,10 @@ function createOfferInfo(response){
 
     offers.forEach(offer =>{
         generateSubsTable(offer);
-        // console.log(offer);
     })
 
 }
+//Обновляем количество подписок
 function updateSubs(response){
     let offerTable = document.querySelectorAll('.offer-id-'+response.offer_id);
     offerTable.forEach(offer => {
@@ -352,11 +345,8 @@ function generateSubsTable(offer){
     offer.user_roles.forEach(role => {
         span5.textContent = span5.textContent + role.name + " ";
     })
-    // span5.textContent = 'Webmaster, Admin, Creator';
 
     td5.appendChild(span5);
-
-
 
     // Добавляем элементы в родительский элемент
     tr.appendChild(th);
@@ -365,7 +355,6 @@ function generateSubsTable(offer){
     tr.appendChild(td3);
     tr.appendChild(td4);
     tr.appendChild(td5);
-
 
     // Находим родительский элемент и добавляем созданный элемент в него
     const tbody = document.querySelector('.offer-user-info');
@@ -389,7 +378,6 @@ function createUserOffersTable (data){
     svg.classList.add('offer-indicator', 'active-indicator');
     svg.setAttribute('width', '16');
     svg.setAttribute('height', '16');
-    // svg.setAttribute('fill', 'green');
     svg.setAttribute('viewBox', '0 0 16 20');
 
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -457,8 +445,6 @@ function createUserOffersTable (data){
 }
 
 function createUserSubsTable (data){
-
-
 
     const tr = document.createElement('tr');
     tr.classList.add('offer-id-' + data.offer_id);
@@ -570,7 +556,6 @@ getErrorsButton.forEach(button => {
         offerId = offerTable.querySelector('.offer-id').textContent.substring(1);
         erorrsTable.innerHTML = "";
         axios.post('admin', {
-            // data: {offer_id: 2},
             type: 'getOfferErrors',
             _method: 'post',
             offer_id: offerId,

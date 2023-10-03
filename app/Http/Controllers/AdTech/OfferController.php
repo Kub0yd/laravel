@@ -72,6 +72,10 @@ class OfferController extends Controller
                 (new SubService())->unsubscribe($request);
                 return back();
                 break;
+            case 'getUpdates':
+                (new SubService())->sendUpdates($request);
+                return back();
+                break;
 
             default:
                 $validated = $request->validate([

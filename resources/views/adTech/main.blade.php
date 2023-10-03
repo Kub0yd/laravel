@@ -97,7 +97,7 @@
 @endsection
 @section('scripts')
     <script>
-        var userId  = {{ Js::from(Auth::id())}};
+        const userId  = {{ Js::from(Auth::id())}};
     </script>
     <script src="/js/main.js"></script>
     {{-- @vite(['public/js/main.js']) --}}

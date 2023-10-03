@@ -26,6 +26,14 @@
 ## Описание классов
 [Контроллеры](/app/Http/Controllers/AdTech/Readme.md)  
 [Сервисы](/app/Services/readme.md)
+## Модели
+[App/Models/AdTech](./app/Models/AdTech/)
+## JS
+[main.js](./public/js/main.js) - для основной страницы  
+[admin.js](./public/js/admin.js) - панель администратора
+Подключенные каналы:
+[app.js](./resources/js/app.js)  
+[adminApp.js](./resources/js/adminApp.js)  
 
 ## Начало работы
 Назначьте роли зарегистрированным пользователям в панели администратора (/admin) в разделе управление:

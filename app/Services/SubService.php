@@ -77,6 +77,20 @@ class SubService
             }
 
     }
+    public function sendUpdates($request)
+    {
+        $offer = Offer::find($request->offer_id);
+        $user = User::find($request->user_id);
+        if ($offer){
+                $data = [
+                'offer_id' => $offer->id,
+                'income' => $offer->transactions->where('user_id', $user->id)->sum('cost') * 0.8,
+                'offer_subs' => $offer->subs->where('is_active', true)->count(),
+            ];
+            DispatchService::UserChannelSend($user->id, DispatchService::createResponse('updateOfferData', $data));
+        }
+
+    }
 
 }
 

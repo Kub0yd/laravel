@@ -22,15 +22,6 @@ channel.subscribed( () => {
         case 'offerStatus':
             offerStatusEvent(response);
             break;
-
-        // case 'error':
-        //     console.log(response);
-        //     break;
-
-        // case 'createOffer':
-        //     createCard(response);
-        //     break;
-
         case 'subStatus':
             updateSubs(response.data);
             break;
@@ -40,12 +31,11 @@ channel.subscribed( () => {
 
 const adminChannel = Echo.private('admin.channel');
 adminChannel.subscribed( () => {
-    test();
+
 
 }).listen('.admin.event', (event) => {
     // console.log(123);
     let response = event.response;
-    console.log(response);
 
     switch (response.type) {
         case 'sendOfferInfo':

@@ -5,12 +5,11 @@ const offersPanel = document.querySelector('.offers-list');
 const subscribeButton =  document.querySelectorAll('.offer-subscribe');
 const balance = document.querySelector('.balance');
 
-
+//Меняем состояние оффера и отправляем в OfferController update()
 offerStatusCheckBox.forEach(item => {
 
     item.addEventListener('change', function() {
 
-        // let offerMark = this.closest('.offer-id').querySelector('.offer-id');
         let offerMark = this.closest('.container').querySelector('.offer-id');
         let indicator = this.closest('.container').querySelector('.offer-indicator');
         let offerId = offerMark.textContent.trim().substring(1);
@@ -30,7 +29,6 @@ offerStatusCheckBox.forEach(item => {
 
 
             axios.post('main/1', {
-                // data: {offer_id: 2},
                 type: 'offerStatus',
                 _method: 'put',
                 is_active: status,
@@ -40,6 +38,8 @@ offerStatusCheckBox.forEach(item => {
 
         })
 })
+
+//Подписка/отписка на оффер. Отправляем в OfferController store()
 parent.addEventListener('click', (event) =>{
 
     if (event.target.classList.contains('sub-button')){
@@ -53,7 +53,6 @@ parent.addEventListener('click', (event) =>{
 
         request = '';
         if (buttonValue.value === 'unsubscribe'){
-            // subButton = item.querySelector('.btn');
             buttonValue.value = 'subscribe';
             subButton.classList.remove('btn-secondary');
             subButton.classList.add('btn-primary');
@@ -85,7 +84,7 @@ parent.addEventListener('click', (event) =>{
 
 })
 
-
+//Обработка сообщения в канал юзера. Получаем доход из RedirectController. type: income
 function incomeVal(response){
 
     const offerSubsCount = document.querySelector('.offer-card-id-' + response.offer_id);
@@ -113,7 +112,7 @@ function incomeVal(response){
         })
     }
     }
-
+//Обработка сообщения в канал юзера. Получаем доход из RedirectController. type: loss
 function lossVal(response){
     const offerSubsCount = document.querySelector('.offer-card-id-' + response.offer_id);
     const offerLoss = offerSubsCount.querySelector('#offer-loss');
@@ -128,23 +127,25 @@ function lossVal(response){
     balance.textContent = "Баланс: " +(Number(newBalanceLoss.toFixed(2)).toString(10)) + "₽";
 
     const offerStat = document.querySelector('#offer-' + response.offer_id + '-statistic');
+    if (offerStat){
+        const offerStatLoss = offerStat.querySelectorAll('.loss-stat');
+        const offerStatrans = offerStat.querySelectorAll('.transitions-stat');
 
-    const offerStatLoss = offerStat.querySelectorAll('.loss-stat');
-    const offerStatrans = offerStat.querySelectorAll('.transitions-stat');
+        offerStatLoss.forEach(item => {
+            offerStatNewLoss = parseFloat(item.textContent) + parseFloat(response.loss);
+            item.textContent = Number(offerStatNewLoss.toFixed(2)).toString(10);
+        })
 
-    offerStatLoss.forEach(item => {
-        offerStatNewLoss = parseFloat(item.textContent) + parseFloat(response.loss);
-        item.textContent = Number(offerStatNewLoss.toFixed(2)).toString(10);
-    })
+        offerStatrans.forEach(item => {
+            value = parseInt(item.textContent);
+            item.textContent = value + 1;
+        })
+    }
 
-    offerStatrans.forEach(item => {
-        value = parseInt(item.textContent);
-        item.textContent = value + 1;
-    })
 }
 
 
-
+//Обработка сообщения общего канала. Меняем статуса оффера. Сервис: OfferService updateOfferStatus(). type: offerStatus
 function offerStatusEvent(event){
 
     let offerCard = document.querySelector('.offer-card-id-'+event.offer_id);
@@ -154,10 +155,17 @@ function offerStatusEvent(event){
         offerCard.remove();
     }else if(!offerCard){
         createCard (event);
+
+        axios.post('main', {
+            _method: 'post',
+            type: "getUpdates",
+            offer_id: event.offer_id,
+            user_id: userId,
+        })
     }
 }
 
-
+//Обработка сообщения канала юзера. Обновление количества подписчиков. Сервис: SubService subscribe(), unsubscribe(). type: subStatus
 function updateSubs(response){
 
     let offerSubsCount = document.querySelector('.offer-' + response.offer_id + '-subs');
@@ -167,12 +175,12 @@ function updateSubs(response){
         offerSubsCount.textContent = "Subs: " + response.offer_subs;
     }
 }
+//Обработка сообщения канала юзера. Меняем статуса оффера, меняем ссылку. Сервис: OfferService updateOfferStatus(). type: updateSubStatus
 function updateSubStatus(response){
-    // let offerCard = document.querySelector('.offer-card-id-'+response.offer_id);
 
     response.offer_active ? activateSub(response) : disactivateSub(response);
 }
-
+//изменение цвета индикатора, удаление персональной ссылки
 function disactivateSub(response){
     let offerCard = document.querySelector('.offer-card-id-'+response.offer_id);
     if (offerCard){
@@ -185,6 +193,7 @@ function disactivateSub(response){
     }
 
 }
+//изменение цвета индикатора, добавление персональной ссылки
 function activateSub(response){
 
     let offerCard = document.querySelector('.offer-card-id-'+response.offer_id);
@@ -196,17 +205,19 @@ function activateSub(response){
     createUserSubURL(response.offer_id, response.user_link);
 
 }
-
+//добавление персональной ссылки офферу
 function addSubInfo(response){
 
     createUserSubURL(response.offer_id, response.sub_url);
 
 }
+function updateOfferData(response){
+    let offer =  document.querySelector(".offer-card-id-" + response.offer_id);
+    offer.querySelector('.offer-subs-count').textContent = "Subs: " + response.offer_subs;
+    offer.querySelector('#offer-income').textContent = "Доход: " + response.income + "₽";
 
-
-
-//
-
+}
+//генерация поля с персональной ссылкой
 function createUserSubURL(offer_id, sub_url){
     let sub = document.querySelector('.offer-card-id-'+offer_id);
 
@@ -230,141 +241,140 @@ function createUserSubURL(offer_id, sub_url){
 
     sub.appendChild(row);
 }
-
+//генерация нового оффера
 function createCard (response){
     let div = document.createElement("div");
-div.className = "row offer-cards-panel";
+    div.className = "row offer-cards-panel";
 
-let container = document.createElement("div");
-container.className = "container rounded-pill border border-2 border-secondary bg-dark bg-gradient text-white offer-card-id-" + response.offer_id;
+    let container = document.createElement("div");
+    container.className = "container rounded-pill border border-2 border-secondary bg-dark bg-gradient text-white offer-card-id-" + response.offer_id;
 
-let row1 = document.createElement("div");
-row1.className = "row align-items-center ";
+    let row1 = document.createElement("div");
+    row1.className = "row align-items-center ";
 
-let col1 = document.createElement("div");
-col1.className = "col-sm-auto";
+    let col1 = document.createElement("div");
+    col1.className = "col-sm-auto";
 
-let row2 = document.createElement("div");
-row2.className = "row align-items-center";
+    let row2 = document.createElement("div");
+    row2.className = "row align-items-center";
 
-let col2_1 = document.createElement("div");
-col2_1.className = "col";
+    let col2_1 = document.createElement("div");
+    col2_1.className = "col";
 
-let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-svg.setAttribute("class", "offer-indicator active-indicator");
-svg.setAttribute("width", "16");
-svg.setAttribute("height", "16");
-svg.setAttribute("fill", "green");
-svg.setAttribute("viewBox", "0 0 16 20");
+    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "offer-indicator active-indicator");
+    svg.setAttribute("width", "16");
+    svg.setAttribute("height", "16");
+    svg.setAttribute("fill", "green");
+    svg.setAttribute("viewBox", "0 0 16 20");
 
-let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-circle.setAttribute("cx", "8");
-circle.setAttribute("cy", "8");
-circle.setAttribute("r", "8");
+    let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", "8");
+    circle.setAttribute("cy", "8");
+    circle.setAttribute("r", "8");
 
-svg.appendChild(circle);
-col2_1.appendChild(svg);
+    svg.appendChild(circle);
+    col2_1.appendChild(svg);
 
-let col2_2 = document.createElement("div");
-col2_2.id = "offer-id-" + response.offer_id;
-col2_2.textContent = "#" + response.offer_id;
-col2_2.className = "col offer-id";
+    let col2_2 = document.createElement("div");
+    col2_2.id = "offer-id-" + response.offer_id;
+    col2_2.textContent = "#" + response.offer_id;
+    col2_2.className = "col offer-id";
 
-row2.appendChild(col2_1);
-row2.appendChild(col2_2);
-col1.appendChild(row2);
+    row2.appendChild(col2_1);
+    row2.appendChild(col2_2);
+    col1.appendChild(row2);
 
-let col3 = document.createElement("div");
-col3.className = "col-sm-auto";
-let span = document.createElement("span");
-span.className = "cart-text";
-span.textContent = "By: " + response.creator;
-col3.appendChild(span);
+    let col3 = document.createElement("div");
+    col3.className = "col-sm-auto";
+    let span = document.createElement("span");
+    span.className = "cart-text";
+    span.textContent = "By: " + response.creator;
+    col3.appendChild(span);
 
-let col4 = document.createElement("div");
-col4.className = "col-lg-auto";
-col4.textContent = response.title;
+    let col4 = document.createElement("div");
+    col4.className = "col-lg-auto";
+    col4.textContent = response.title;
 
-let col5 = document.createElement("div");
-col5.className = "col-lg-auto";
-let a = document.createElement("a");
-a.href = response.URL;
-a.textContent = response.URL;
-col5.appendChild(a);
+    let col5 = document.createElement("div");
+    col5.className = "col-lg-auto";
+    let a = document.createElement("a");
+    a.href = response.URL;
+    a.textContent = response.URL;
+    col5.appendChild(a);
 
-let col6 = document.createElement("div");
-col6.className = "col-sm-auto";
-let span2 = document.createElement("span");
-span2.textContent = "Price: "+ response.price + " ₽";
-col6.appendChild(span2);
+    let col6 = document.createElement("div");
+    col6.className = "col-sm-auto";
+    let span2 = document.createElement("span");
+    span2.textContent = "Price: "+ response.price + " ₽";
+    col6.appendChild(span2);
 
-let col7 = document.createElement("div");
-col7.className = "col-lg order-12 d-flex justify-content-end";
+    let col7 = document.createElement("div");
+    col7.className = "col-lg order-12 d-flex justify-content-end";
 
-let row3 = document.createElement("div");
-row3.className = "row align-items-center offer-"+response.offer_id+"-subs-row";
+    let row3 = document.createElement("div");
+    row3.className = "row align-items-center offer-"+response.offer_id+"-subs-row";
 
-let statButtonCol = document.createElement("div");
-statButtonCol.className = "col-auto offer-statistic-button";
-let statButton = document.createElement("button");
-statButton.type = "button";
-statButton.className = "btn  btn-sm btn-primary";
-statButton.dataset.bsToggle = "modal";
-statButton.dataset.bsTarget = "#offer-" + response.offer_id +"-statistic";
-statButton.textContent = 'Статистика';
-statButtonCol.appendChild(statButton);
-row3.appendChild(statButtonCol);
+    let statButtonCol = document.createElement("div");
+    statButtonCol.className = "col-auto offer-statistic-button";
+    let statButton = document.createElement("button");
+    statButton.type = "button";
+    statButton.className = "btn  btn-sm btn-primary";
+    statButton.dataset.bsToggle = "modal";
+    statButton.dataset.bsTarget = "#offer-" + response.offer_id +"-statistic";
+    statButton.textContent = 'Статистика';
+    statButtonCol.appendChild(statButton);
+    row3.appendChild(statButtonCol);
 
-let col8 = document.createElement("div");
-col8.className = "col-auto";
-col8.textContent = "Subs: 0";
-row3.appendChild(col8);
+    let col8 = document.createElement("div");
+    col8.className = "col-auto offer-subs-count";
+    col8.textContent = "Subs: 0";
+    row3.appendChild(col8);
 
-let col9 = document.createElement("div");
-col9.className = "col-auto";
-col9.id = "offer-loss";
-let span3 = document.createElement("span");
-span3.className = "text-end col";
-span3.id = "offer-income";
-span3.textContent = "Доход: 0₽";
-col9.appendChild(span3);
-row3.appendChild(col9);
+    let col9 = document.createElement("div");
+    col9.className = "col-auto";
+    col9.id = "offer-loss";
+    let span3 = document.createElement("span");
+    span3.className = "text-end col";
+    span3.id = "offer-income";
+    span3.textContent = "Доход: 0₽";
+    col9.appendChild(span3);
+    row3.appendChild(col9);
 
-let col10 = document.createElement("div");
-col10.className = "col-sm order-12 d-flex justify-content-end offer-subscribe";
-let button = document.createElement("button");
-button.className = "btn btn-primary btn-sm col sub-button";
-button.id = "offer-id-"+response.offer_id + "-button";
-button.type = "submit";
-button.textContent = "подписаться";
-let input1 = document.createElement("input");
-input1.type = "hidden";
-input1.name = "subscription";
-input1.value = "subscribe";
-let input2 = document.createElement("input");
-input2.type = "hidden";
-input2.name = "offer_id";
-input2.value = response.offer_id;
+    let col10 = document.createElement("div");
+    col10.className = "col-sm order-12 d-flex justify-content-end offer-subscribe";
+    let button = document.createElement("button");
+    button.className = "btn btn-primary btn-sm col sub-button";
+    button.id = "offer-id-"+response.offer_id + "-button";
+    button.type = "submit";
+    button.textContent = "подписаться";
+    let input1 = document.createElement("input");
+    input1.type = "hidden";
+    input1.name = "subscription";
+    input1.value = "subscribe";
+    let input2 = document.createElement("input");
+    input2.type = "hidden";
+    input2.name = "offer_id";
+    input2.value = response.offer_id;
 
-col10.appendChild(button);
-col10.appendChild(input1);
-col10.appendChild(input2);
+    col10.appendChild(button);
+    col10.appendChild(input1);
+    col10.appendChild(input2);
 
-row3.appendChild(col10);
-col7.appendChild(row3);
+    row3.appendChild(col10);
+    col7.appendChild(row3);
 
-row1.appendChild(col1);
-row1.appendChild(col3);
-row1.appendChild(col4);
-row1.appendChild(col5);
-row1.appendChild(col6);
-row1.appendChild(col7);
+    row1.appendChild(col1);
+    row1.appendChild(col3);
+    row1.appendChild(col4);
+    row1.appendChild(col5);
+    row1.appendChild(col6);
+    row1.appendChild(col7);
 
-container.appendChild(row1);
-// form.appendChild(container);
-div.appendChild(container);
-if (offersPanel){
-    offersPanel.appendChild(div);
-}
+    container.appendChild(row1);
+    div.appendChild(container);
+    if (offersPanel){
+        offersPanel.appendChild(div);
+    }
 
 }

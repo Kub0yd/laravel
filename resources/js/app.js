@@ -61,6 +61,9 @@ userChannel.subscribed( () => {
         case 'updateSubStatus':
             updateSubStatus(response.data);
             break;
+        case 'updateOfferData':
+            updateOfferData(response.data);
+            break;
     }
 });
 
