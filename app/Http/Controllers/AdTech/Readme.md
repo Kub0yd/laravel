@@ -1,40 +1,41 @@
-## AdminController
+## [AdminController](./AdminController.php)
 Класс для работы со страницей /admin   
 
-index():  
-Возвращает blade adminPanel с коллекциями офферов, пользователей и транзакций для пользователя с правами администрирования.  
+[index()](./AdminController.php#L22):  
+Возвращает blade adminPanel с коллекциями офферов, пользователей, транзакций и баланса для пользователя с правами администрирования.  
 
-store():
+[store($request)](./AdminController.php#L61):
 Принимает post request из admin.js с типами сообщений:  
 1. getOfferInfo 
 2. getUserInfo
 3. updateUserRoles
 4. getOfferErrors
 
-## OfferController
+## [OfferController](./OfferController.php)
 Класс для работы со страницей /main  
 
-index():  
+[index()](./OfferController.php#L26):  
 Возвращает blade main для авторизованного пользователя с коллекциями:  
 $offers - список созданных пользователем офферов  
 $userSubs - список активных подписок пользователя  
-$allOffers - список доступных пользователю подписок (где он не создатель оффера и не подписчик)    
+$allOffers - список доступных пользователю подписок (где он не создатель оффера и не подписчик)  
+$balance - текущий баланс с учетом доходов по подпискам и расходам по офферам  
 
-store():
+[store($request)](./OfferController.php#L63):
 Принимает post request из main.js с типами сообщений:  
 1. subscription 
 2. unsubscribe
 
 По умолчанию - создание нового оффера
 
-update():  
+[update()](./OfferController.php#L108):  
 Принимает put request из main.js с типами сообщений:  
 1. offerStatus
 
-## RedirectController
+## [RedirectController](./RedirectController.php)
 Класс для системы редиректоров  
 
-redirect($request):  
+[redirect($request)](./RedirectController.php#L25):  
 По текущей ссылке получает подписку пользователя $sub, и оффер найденой подписки $offer.    
 Если подписка не найдена - скидываем в 404.  
 Если подписка или оффер не активны - записываем в таблицу bad_transactions и переводим в 404. 

@@ -1,5 +1,5 @@
-## AdminService
- - sendOfferInfo($request)  
+## [AdminService](./AdminService.php)
+ - [sendOfferInfo($request)](./AdminService.php#L14)  
 Описание: отправляет в канал администратора информацию по офферу  
 Параметры:  
 $request - содержит id оффера {offer_id}  
@@ -16,7 +16,7 @@ $offerUserInfo[] - массив для отправки в admin.js:
     - 'user_personalURL' - персональная ссылка подписки пользователя
     - 'is_active' - состояние подписки  
 
- - sendUserInfo($request)  
+ - [sendUserInfo($request)](./AdminService.php#L39) 
 Описание: отправляет в канал администратора подписки и офферы определенного пользователя  
 Параметры:  
 $request - содержит имя пользователя {user_name}    
@@ -46,20 +46,20 @@ $subInfo[] - массив для отправки в admin.js
         - 'offer_subs' - количество подписок по офферу  
         - 'offer_loss' - расход по офферу
 
- - updateUserRoles($request)  
+ - [updateUserRoles($request)](./AdminService.php#L92) 
 Описание: отключает зарзрешения/роли пользователя и назначает нововые новые 
 Параметры:  
 $request - содержит id пользователя и роли {user_id, user_roles}  
 $user - объект найденного пользователя  
 
- - assignRole($user, $roleName)  
+ - [assignRole($user, $roleName)](./AdminService.php#L108)
 Описание:  назначает роли и разрешения пользователя  
 Параметры:  
 $role - объект роли 
 $user - объект пользователя  
 $permissions - разрешения для роли  
 
- - sendOfferErrors($request)  
+ - [sendOfferErrors($request)](./AdminService.php#L117)  
 Описание: отправляет в канал администратора ошибки переходов по офферу  
 Параметры:  
 $request - содержит id оффера {offer_id}  
@@ -71,18 +71,18 @@ $badTransactions[] - массив с ошибками переходов по к
     - 'errors' - записи по ошибкам (id подписки, ip клиента, время) 
 
 
-## DispatchService
-- AdminChannelSend($data)  
+## [DispatchService](./DispatchService.php)
+- [AdminChannelSend($data)](./DispatchService.php#L14)  
 Описание: отправляет в админский канал данные  
-- AUserChannelSend($userId, $data)  
+- [UserChannelSend($userId, $data)](./DispatchService.php#L19)  
 Описание: отправляет в частый канал пользователя данные  
-- OfferStatusChannelSend($data)  
+- [OfferStatusChannelSend($data)](./DispatchService.php#L24)  
 Описание: отправляет в общий канал данные  
-- createResponse($type, $data)  
+- [createResponse($type, $data)](./DispatchService.php#L30)  
 Описание: возвращает структуру для отправки на клиент  данных
 
-## OfferService
-- updateOfferStatus($requestData)  
+## [OfferService](./OfferService.php)
+- [updateOfferStatus($requestData)](./OfferService.php#L17)  
 Описание: отправляет в общий канал и канал подписчика оффера состояние его активности   
 Параметры:  
 $requestData - содержит id оффера и его состояние {offer_id, is_active}  
@@ -99,7 +99,7 @@ $offerStatus[] - массив для отправки в общий канал
     - 'offer_id' - id оффера
     - 'user_link' - персональная ссылка подписчика
     - 'offer_active' - состояние оффера  
-- createOffer($request)
+- [createOffer($request)](./OfferService.php#L53)
 Описание: создает запись нового оффера  
 Параметры:  
 $request - содержит название, ссылку и стоимость оффера {title, url, price}
@@ -109,15 +109,15 @@ $data - массив для отправки в админский канал
     - 'creator' - имя создателя оффера
     - 'title' - название оффера
     - 'URL' - целевая ссылка оффера
-## SubService
- - subscribe($request)
+## [SubService](./SubService.php)
+ - [subscribe($request)](./SubService.php#L19)
 Описание: обновляет статус подписки или создает новую запись. Затем отправляет в общий канал состояние подписки, и в частный канал информацию о  подписке  
- - unsubscribe($request)
+ - [unsubscribe($request)](./SubService.php#L58)
  Описание: изменяет состояние подписки и отправляет информацию в общий канал
 
-## UserService
-- newUserRole($user)  
+## [UserService](./UserService.php)
+- [newUserRole($user)](./UserService.php#L10)  
 Описание: добавляет новому пользователю роли и разрешения  
 $user - объект пользователя 
-- adminRole($user)
+- [adminRole($user)](./UserService.php#L17)
 Описание:назначает права администратора  
